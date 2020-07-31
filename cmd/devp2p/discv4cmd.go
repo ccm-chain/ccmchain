@@ -26,7 +26,6 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/p2p/discover"
 	"github.com/ethereum/go-ethereum/p2p/enode"
-	"github.com/ethereum/go-ethereum/params"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -124,7 +123,7 @@ func getNodeArgAndStartV4(ctx *cli.Context) (*enode.Node, *discover.UDPv4, error
 }
 
 func parseBootnodes(ctx *cli.Context) ([]*enode.Node, error) {
-	s := params.RinkebyBootnodes
+	s := make([]string, 0)
 	if ctx.IsSet(bootnodesFlag.Name) {
 		s = strings.Split(ctx.String(bootnodesFlag.Name), ",")
 	}
