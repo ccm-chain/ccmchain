@@ -20,10 +20,10 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/ccm-chain/ccmchain/common"
+	"github.com/ccm-chain/ccmchain/common/math"
+	"github.com/ccm-chain/ccmchain/core/types"
+	"github.com/ccm-chain/ccmchain/params"
 	"golang.org/x/crypto/sha3"
 )
 

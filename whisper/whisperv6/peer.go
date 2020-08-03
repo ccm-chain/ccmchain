@@ -22,11 +22,11 @@ import (
 	"sync"
 	"time"
 
+	"github.com/ccm-chain/ccmchain/common"
+	"github.com/ccm-chain/ccmchain/log"
+	"github.com/ccm-chain/ccmchain/p2p"
+	"github.com/ccm-chain/ccmchain/rlp"
 	mapset "github.com/deckarep/golang-set"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/rlp"
 )
 
 // Peer represents a whisper protocol peer connection.

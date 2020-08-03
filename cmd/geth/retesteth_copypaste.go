@@ -19,9 +19,9 @@ package main
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ccm-chain/ccmchain/common"
+	"github.com/ccm-chain/ccmchain/common/hexutil"
+	"github.com/ccm-chain/ccmchain/core/types"
 )
 
 // RPCTransaction represents a transaction that will serialize to the RPC representation of a transaction

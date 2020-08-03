@@ -58,8 +58,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ethereum/go-ethereum/internal/build"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/ccm-chain/ccmchain/internal/build"
+	"github.com/ccm-chain/ccmchain/params"
 )
 
 var (

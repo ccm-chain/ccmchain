@@ -23,11 +23,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common/mclock"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/les/flowcontrol"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/ccm-chain/ccmchain/common/mclock"
+	"github.com/ccm-chain/ccmchain/eth"
+	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/les/flowcontrol"
+	"github.com/ccm-chain/ccmchain/log"
 )
 
 const makeCostStats = false // make request cost statistics during operation

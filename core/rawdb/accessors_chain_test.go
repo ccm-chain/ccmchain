@@ -23,10 +23,10 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/ccm-chain/ccmchain/common"
+	"github.com/ccm-chain/ccmchain/core/types"
+	"github.com/ccm-chain/ccmchain/params"
+	"github.com/ccm-chain/ccmchain/rlp"
 	"golang.org/x/crypto/sha3"
 )
 

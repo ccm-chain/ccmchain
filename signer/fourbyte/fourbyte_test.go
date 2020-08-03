@@ -22,8 +22,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/ccm-chain/ccmchain/accounts/abi"
+	"github.com/ccm-chain/ccmchain/common"
 )
 
 // Tests that all the selectors contained in the 4byte database are valid.

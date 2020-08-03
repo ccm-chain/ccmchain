@@ -29,11 +29,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/p2p/enode"
-	"github.com/ethereum/go-ethereum/p2p/simulations/adapters"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/ccm-chain/ccmchain/event"
+	"github.com/ccm-chain/ccmchain/p2p"
+	"github.com/ccm-chain/ccmchain/p2p/enode"
+	"github.com/ccm-chain/ccmchain/p2p/simulations/adapters"
+	"github.com/ccm-chain/ccmchain/rpc"
 	"github.com/julienschmidt/httprouter"
 	"golang.org/x/net/websocket"
 )

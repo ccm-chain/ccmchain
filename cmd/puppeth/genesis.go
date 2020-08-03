@@ -23,12 +23,12 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	math2 "github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/consensus/ethash"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/ccm-chain/ccmchain/common"
+	"github.com/ccm-chain/ccmchain/common/hexutil"
+	math2 "github.com/ccm-chain/ccmchain/common/math"
+	"github.com/ccm-chain/ccmchain/consensus/ethash"
+	"github.com/ccm-chain/ccmchain/core"
+	"github.com/ccm-chain/ccmchain/params"
 )
 
 // alethGenesisSpec represents the genesis specification format used by the

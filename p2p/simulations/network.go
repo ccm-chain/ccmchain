@@ -27,11 +27,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p"
-	"github.com/ethereum/go-ethereum/p2p/enode"
-	"github.com/ethereum/go-ethereum/p2p/simulations/adapters"
+	"github.com/ccm-chain/ccmchain/event"
+	"github.com/ccm-chain/ccmchain/log"
+	"github.com/ccm-chain/ccmchain/p2p"
+	"github.com/ccm-chain/ccmchain/p2p/enode"
+	"github.com/ccm-chain/ccmchain/p2p/simulations/adapters"
 )
 
 var DialBanTimeout = 200 * time.Millisecond

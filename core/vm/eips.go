@@ -19,7 +19,7 @@ package vm
 import (
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/ccm-chain/ccmchain/params"
 )
 
 // EnableEIP enables the given EIP on the config.

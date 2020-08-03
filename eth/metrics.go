@@ -17,8 +17,8 @@
 package eth
 
 import (
-	"github.com/ethereum/go-ethereum/metrics"
-	"github.com/ethereum/go-ethereum/p2p"
+	"github.com/ccm-chain/ccmchain/metrics"
+	"github.com/ccm-chain/ccmchain/p2p"
 )
 
 var (
