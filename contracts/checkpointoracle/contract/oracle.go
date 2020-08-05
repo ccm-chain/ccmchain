@@ -7,7 +7,7 @@ import (
 	"math/big"
 	"strings"
 
-	ethereum "github.com/ccm-chain/ccmchain"
+	"github.com/ccm-chain/ccmchain"
 	"github.com/ccm-chain/ccmchain/accounts/abi"
 	"github.com/ccm-chain/ccmchain/accounts/abi/bind"
 	"github.com/ccm-chain/ccmchain/common"
@@ -19,7 +19,7 @@ import (
 var (
 	_ = big.NewInt
 	_ = strings.NewReader
-	_ = ethereum.NotFound
+	_ = ccmchain.NotFound
 	_ = abi.U256
 	_ = bind.Bind
 	_ = common.Big1
@@ -283,7 +283,7 @@ type CheckpointOracleNewCheckpointVoteIterator struct {
 	event    string              // Event name to use for unpacking event data
 
 	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	sub  ccmchain.Subscription // Subscription for errors, completion and termination
 	done bool                  // Whether the subscription completed delivering logs
 	fail error                 // Occurred error to stop iteration
 }

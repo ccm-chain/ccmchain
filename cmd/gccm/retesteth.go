@@ -59,11 +59,11 @@ var (
 	retestethCommand = cli.Command{
 		Action:      utils.MigrateFlags(retesteth),
 		Name:        "retesteth",
-		Usage:       "Launches geth in retesteth mode",
+		Usage:       "Launches gccm in retesteth mode",
 		ArgsUsage:   "",
 		Flags:       []cli.Flag{rpcPortFlag},
 		Category:    "MISCELLANEOUS COMMANDS",
-		Description: `Launches geth in retesteth mode (no database, no network, only retesteth RPC interface)`,
+		Description: `Launches gccm in retesteth mode (no database, no network, only retesteth RPC interface)`,
 	}
 )
 
@@ -815,7 +815,7 @@ func (api *RetestethAPI) StorageRangeAt(ctx context.Context,
 }
 
 func (api *RetestethAPI) ClientVersion(ctx context.Context) (string, error) {
-	return "Geth-" + params.VersionWithCommit(gitCommit, gitDate), nil
+	return "Gccm-" + params.VersionWithCommit(gitCommit, gitDate), nil
 }
 
 // splitAndTrim splits input separated by a comma
@@ -847,7 +847,7 @@ func retesteth(ctx *cli.Context) error {
 			Version:   "1.0",
 		},
 		{
-			Namespace: "eth",
+			Namespace: "ccm",
 			Public:    true,
 			Service:   ethApi,
 			Version:   "1.0",
@@ -870,7 +870,7 @@ func retesteth(ctx *cli.Context) error {
 
 	// start http server
 	httpEndpoint := fmt.Sprintf("%s:%d", ctx.GlobalString(utils.RPCListenAddrFlag.Name), ctx.Int(rpcPortFlag.Name))
-	listener, _, err := rpc.StartHTTPEndpoint(httpEndpoint, rpcAPI, []string{"test", "eth", "debug", "web3"}, cors, vhosts, rpc.DefaultHTTPTimeouts)
+	listener, _, err := rpc.StartHTTPEndpoint(httpEndpoint, rpcAPI, []string{"test", "ccm", "debug", "web3"}, cors, vhosts, rpc.DefaultHTTPTimeouts)
 	if err != nil {
 		utils.Fatalf("Could not start RPC api: %v", err)
 	}

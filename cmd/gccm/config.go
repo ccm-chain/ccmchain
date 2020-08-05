@@ -24,8 +24,6 @@ import (
 	"reflect"
 	"unicode"
 
-	cli "gopkg.in/urfave/cli.v1"
-
 	"github.com/ccm-chain/ccmchain/cmd/utils"
 	"github.com/ccm-chain/ccmchain/dashboard"
 	"github.com/ccm-chain/ccmchain/eth"
@@ -33,6 +31,7 @@ import (
 	"github.com/ccm-chain/ccmchain/params"
 	whisper "github.com/ccm-chain/ccmchain/whisper/whisperv6"
 	"github.com/naoina/toml"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
 var (
@@ -100,9 +99,9 @@ func defaultNodeConfig() node.Config {
 	cfg := node.DefaultConfig
 	cfg.Name = clientIdentifier
 	cfg.Version = params.VersionWithCommit(gitCommit, gitDate)
-	cfg.HTTPModules = append(cfg.HTTPModules, "eth", "shh")
-	cfg.WSModules = append(cfg.WSModules, "eth", "shh")
-	cfg.IPCPath = "geth.ipc"
+	cfg.HTTPModules = append(cfg.HTTPModules, "ccm", "shh")
+	cfg.WSModules = append(cfg.WSModules, "ccm", "shh")
+	cfg.IPCPath = "gccm.ipc"
 	return cfg
 }
 

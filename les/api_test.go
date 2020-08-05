@@ -293,7 +293,7 @@ func testCapacityAPI(t *testing.T, clientCount int) {
 
 func getHead(ctx context.Context, t *testing.T, client *rpc.Client) (uint64, common.Hash) {
 	res := make(map[string]interface{})
-	if err := client.CallContext(ctx, &res, "eth_getBlockByNumber", "latest", false); err != nil {
+	if err := client.CallContext(ctx, &res, "ccm_getBlockByNumber", "latest", false); err != nil {
 		t.Fatalf("Failed to obtain head block: %v", err)
 	}
 	numStr, ok := res["number"].(string)
@@ -318,8 +318,8 @@ func testRequest(ctx context.Context, t *testing.T, client *rpc.Client) bool {
 	var addr common.Address
 	rand.Read(addr[:])
 	c, _ := context.WithTimeout(ctx, time.Second*12)
-	//	if err := client.CallContext(ctx, &res, "eth_getProof", addr, nil, "latest"); err != nil {
-	err := client.CallContext(c, &res, "eth_getBalance", addr, "latest")
+	//	if err := client.CallContext(ctx, &res, "ccm_getProof", addr, nil, "latest"); err != nil {
+	err := client.CallContext(c, &res, "ccm_getBalance", addr, "latest")
 	if err != nil {
 		t.Log("request error:", err)
 	}
