@@ -43,7 +43,7 @@ type Backend interface {
 
 // Config is the configuration parameters of mining.
 type Config struct {
-	Etherbase common.Address `toml:",omitempty"` // Public address for block mining rewards (default = first account)
+	Coinbase  common.Address `toml:",omitempty"` // Public address for block mining rewards (default = first account)
 	Notify    []string       `toml:",omitempty"` // HTTP URL list to be notified of new work packages(only useful in ethash).
 	ExtraData hexutil.Bytes  `toml:",omitempty"` // Block extra data set by the miner
 	GasFloor  uint64         // Target gas floor for mined blocks.
@@ -121,7 +121,7 @@ func (self *Miner) update() {
 
 func (self *Miner) Start(coinbase common.Address) {
 	atomic.StoreInt32(&self.shouldStart, 1)
-	self.SetEtherbase(coinbase)
+	self.SetCoinbase(coinbase)
 
 	if atomic.LoadInt32(&self.canStart) == 0 {
 		log.Info("Network syncing, will start miner afterwards")
@@ -178,7 +178,7 @@ func (self *Miner) PendingBlock() *types.Block {
 	return self.worker.pendingBlock()
 }
 
-func (self *Miner) SetEtherbase(addr common.Address) {
+func (self *Miner) SetCoinbase(addr common.Address) {
 	self.coinbase = addr
-	self.worker.setEtherbase(addr)
+	self.worker.setCoinbase(addr)
 }

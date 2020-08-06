@@ -419,14 +419,14 @@ var (
 		Usage: "Minimum gas price for mining a transaction (deprecated, use --miner.gasprice)",
 		Value: eth.DefaultConfig.Miner.GasPrice,
 	}
-	MinerEtherbaseFlag = cli.StringFlag{
-		Name:  "miner.etherbase",
+	MinerCoinbaseFlag = cli.StringFlag{
+		Name:  "miner.coinbase",
 		Usage: "Public address for block mining rewards (default = first account)",
 		Value: "0",
 	}
-	MinerLegacyEtherbaseFlag = cli.StringFlag{
-		Name:  "etherbase",
-		Usage: "Public address for block mining rewards (default = first account, deprecated, use --miner.etherbase)",
+	MinerLegacyCoinbaseFlag = cli.StringFlag{
+		Name:  "coinbase",
+		Usage: "Public address for block mining rewards (default = first account, deprecated, use --miner.coinbase)",
 		Value: "0",
 	}
 	MinerExtraDataFlag = cli.StringFlag{
@@ -1012,27 +1012,27 @@ func MakeAddress(ks *keystore.KeyStore, account string) (accounts.Account, error
 	return accs[index], nil
 }
 
-// setEtherbase retrieves the etherbase either from the directly specified
+// setCoinbase retrieves the coinbase either from the directly specified
 // command line flags or from the keystore if CLI indexed.
-func setEtherbase(ctx *cli.Context, ks *keystore.KeyStore, cfg *eth.Config) {
-	// Extract the current etherbase, new flag overriding legacy one
-	var etherbase string
-	if ctx.GlobalIsSet(MinerLegacyEtherbaseFlag.Name) {
-		etherbase = ctx.GlobalString(MinerLegacyEtherbaseFlag.Name)
+func setCoinbase(ctx *cli.Context, ks *keystore.KeyStore, cfg *eth.Config) {
+	// Extract the current coinbase, new flag overriding legacy one
+	var coinbase string
+	if ctx.GlobalIsSet(MinerLegacyCoinbaseFlag.Name) {
+		coinbase = ctx.GlobalString(MinerLegacyCoinbaseFlag.Name)
 	}
-	if ctx.GlobalIsSet(MinerEtherbaseFlag.Name) {
-		etherbase = ctx.GlobalString(MinerEtherbaseFlag.Name)
+	if ctx.GlobalIsSet(MinerCoinbaseFlag.Name) {
+		coinbase = ctx.GlobalString(MinerCoinbaseFlag.Name)
 	}
-	// Convert the etherbase into an address and configure it
-	if etherbase != "" {
+	// Convert the coinbase into an address and configure it
+	if coinbase != "" {
 		if ks != nil {
-			account, err := MakeAddress(ks, etherbase)
+			account, err := MakeAddress(ks, coinbase)
 			if err != nil {
-				Fatalf("Invalid miner etherbase: %v", err)
+				Fatalf("Invalid miner coinbase: %v", err)
 			}
-			cfg.Miner.Etherbase = account.Address
+			cfg.Miner.Coinbase = account.Address
 		} else {
-			Fatalf("No etherbase configured")
+			Fatalf("No coinbase configured")
 		}
 	}
 }
@@ -1379,7 +1379,7 @@ func SetEthConfig(ctx *cli.Context, stack *node.Node, cfg *eth.Config) {
 	if keystores := stack.AccountManager().Backends(keystore.KeyStoreType); len(keystores) > 0 {
 		ks = keystores[0].(*keystore.KeyStore)
 	}
-	setEtherbase(ctx, ks, cfg)
+	setCoinbase(ctx, ks, cfg)
 	setGPO(ctx, &cfg.GPO)
 	setTxPool(ctx, &cfg.TxPool)
 	setEthash(ctx, cfg)
