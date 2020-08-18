@@ -49,7 +49,6 @@ import (
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/eth"
 	"github.com/ccm-chain/ccmchain/eth/downloader"
-	"github.com/ccm-chain/ccmchain/ethstats"
 	"github.com/ccm-chain/ccmchain/les"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/node"
@@ -58,6 +57,7 @@ import (
 	"github.com/ccm-chain/ccmchain/p2p/enode"
 	"github.com/ccm-chain/ccmchain/p2p/nat"
 	"github.com/ccm-chain/ccmchain/params"
+	"github.com/ccm-chain/ccmchain/stats"
 	"golang.org/x/net/websocket"
 )
 
@@ -217,7 +217,7 @@ type faucet struct {
 	lock sync.RWMutex // Lock protecting the faucet's internals
 }
 
-func newFaucet(genesis *core.Genesis, port int, enodes []*discv5.Node, network uint64, stats string, ks *keystore.KeyStore, index []byte) (*faucet, error) {
+func newFaucet(genesis *core.Genesis, port int, enodes []*discv5.Node, network uint64, stat string, ks *keystore.KeyStore, index []byte) (*faucet, error) {
 	// Assemble the raw devp2p protocol stack
 	stack, err := node.New(&node.Config{
 		Name:    "gccm",
@@ -245,12 +245,12 @@ func newFaucet(genesis *core.Genesis, port int, enodes []*discv5.Node, network u
 	}); err != nil {
 		return nil, err
 	}
-	// Assemble the ethstats monitoring and reporting service'
-	if stats != "" {
+	// Assemble the stats monitoring and reporting service'
+	if stat != "" {
 		if err := stack.Register(func(ctx *node.ServiceContext) (node.Service, error) {
 			var serv *les.LightEthereum
 			ctx.Service(&serv)
-			return ethstats.New(stats, nil, serv)
+			return stats.New(stat, nil, serv)
 		}); err != nil {
 			return nil, err
 		}

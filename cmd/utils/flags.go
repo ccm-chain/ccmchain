@@ -44,7 +44,6 @@ import (
 	"github.com/ccm-chain/ccmchain/eth/downloader"
 	"github.com/ccm-chain/ccmchain/eth/gasprice"
 	"github.com/ccm-chain/ccmchain/ethdb"
-	"github.com/ccm-chain/ccmchain/ethstats"
 	"github.com/ccm-chain/ccmchain/graphql"
 	"github.com/ccm-chain/ccmchain/les"
 	"github.com/ccm-chain/ccmchain/log"
@@ -59,6 +58,7 @@ import (
 	"github.com/ccm-chain/ccmchain/p2p/netutil"
 	"github.com/ccm-chain/ccmchain/params"
 	"github.com/ccm-chain/ccmchain/rpc"
+	"github.com/ccm-chain/ccmchain/stats"
 	whisper "github.com/ccm-chain/ccmchain/whisper/whisperv6"
 	pcsclite "github.com/gballet/go-libpcsclite"
 	cli "gopkg.in/urfave/cli.v1"
@@ -476,8 +476,8 @@ var (
 	}
 	// Logging and debug settings
 	EthStatsURLFlag = cli.StringFlag{
-		Name:  "ethstats",
-		Usage: "Reporting URL of a ethstats service (nodename:secret@host:port)",
+		Name:  "stats",
+		Usage: "Reporting URL of a stats service (nodename:secret@host:port)",
 	}
 	FakePoWFlag = cli.BoolFlag{
 		Name:  "fakepow",
@@ -1524,8 +1524,8 @@ func RegisterEthStatsService(stack *node.Node, url string) {
 		var lesServ *les.LightEthereum
 		ctx.Service(&lesServ)
 
-		// Let ethstats use whichever is not nil
-		return ethstats.New(url, ethServ, lesServ)
+		// Let stats use whichever is not nil
+		return stats.New(url, ethServ, lesServ)
 	}); err != nil {
 		Fatalf("Failed to register the ccmchain Stats service: %v", err)
 	}
