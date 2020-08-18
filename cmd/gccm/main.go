@@ -30,12 +30,12 @@ import (
 
 	"github.com/ccm-chain/ccmchain/accounts"
 	"github.com/ccm-chain/ccmchain/accounts/keystore"
+	"github.com/ccm-chain/ccmchain/client"
 	"github.com/ccm-chain/ccmchain/cmd/utils"
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/console"
 	"github.com/ccm-chain/ccmchain/eth"
 	"github.com/ccm-chain/ccmchain/eth/downloader"
-	"github.com/ccm-chain/ccmchain/ethclient"
 	"github.com/ccm-chain/ccmchain/internal/debug"
 	"github.com/ccm-chain/ccmchain/les"
 	"github.com/ccm-chain/ccmchain/log"
@@ -332,7 +332,7 @@ func startNode(ctx *cli.Context, stack *node.Node) {
 	if err != nil {
 		utils.Fatalf("Failed to attach to self: %v", err)
 	}
-	ethClient := ethclient.NewClient(rpcClient)
+	ethClient := client.NewClient(rpcClient)
 
 	// Set contract backend for ccmchain service if local node
 	// is serving LES requests.

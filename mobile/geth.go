@@ -24,10 +24,10 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"github.com/ccm-chain/ccmchain/client"
 	"github.com/ccm-chain/ccmchain/core"
 	"github.com/ccm-chain/ccmchain/eth"
 	"github.com/ccm-chain/ccmchain/eth/downloader"
-	"github.com/ccm-chain/ccmchain/ethclient"
 	"github.com/ccm-chain/ccmchain/ethstats"
 	"github.com/ccm-chain/ccmchain/internal/debug"
 	"github.com/ccm-chain/ccmchain/les"
@@ -207,12 +207,12 @@ func (n *Node) Stop() error {
 }
 
 // GetEthereumClient retrieves a client to access the Ethereum subsystem.
-func (n *Node) GetEthereumClient() (client *EthereumClient, _ error) {
+func (n *Node) GetEthereumClient() (c *EthereumClient, _ error) {
 	rpc, err := n.node.Attach()
 	if err != nil {
 		return nil, err
 	}
-	return &EthereumClient{ethclient.NewClient(rpc)}, nil
+	return &EthereumClient{client.NewClient(rpc)}, nil
 }
 
 // GetNodeInfo gathers and returns a collection of metadata known about the host.

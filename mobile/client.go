@@ -21,18 +21,18 @@ package geth
 import (
 	"math/big"
 
+	"github.com/ccm-chain/ccmchain/client"
 	"github.com/ccm-chain/ccmchain/core/types"
-	"github.com/ccm-chain/ccmchain/ethclient"
 )
 
 // EthereumClient provides access to the Ethereum APIs.
 type EthereumClient struct {
-	client *ethclient.Client
+	client *client.Client
 }
 
 // NewEthereumClient connects a client to the given URL.
-func NewEthereumClient(rawurl string) (client *EthereumClient, _ error) {
-	rawClient, err := ethclient.Dial(rawurl)
+func NewEthereumClient(rawurl string) (c *EthereumClient, _ error) {
+	rawClient, err := client.Dial(rawurl)
 	return &EthereumClient{rawClient}, err
 }
 
