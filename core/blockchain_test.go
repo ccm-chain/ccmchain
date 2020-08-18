@@ -34,7 +34,7 @@ import (
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/core/vm"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/params"
 )
 
@@ -47,7 +47,7 @@ var (
 // newCanonical creates a chain database, and injects a deterministic canonical
 // chain. Depending on the full flag, if creates either a full block chain or a
 // header only chain.
-func newCanonical(engine consensus.Engine, n int, full bool) (ethdb.Database, *BlockChain, error) {
+func newCanonical(engine consensus.Engine, n int, full bool) (database.Database, *BlockChain, error) {
 	var (
 		db      = rawdb.NewMemoryDatabase()
 		genesis = new(Genesis).MustCommit(db)
@@ -717,7 +717,7 @@ func TestLightVsFastVsFullChainHeads(t *testing.T) {
 	blocks, receipts := GenerateChain(gspec.Config, genesis, ethash.NewFaker(), gendb, int(height), nil)
 
 	// makeDb creates a db instance for testing.
-	makeDb := func() (ethdb.Database, func()) {
+	makeDb := func() (database.Database, func()) {
 		dir, err := ioutil.TempDir("", "")
 		if err != nil {
 			t.Fatalf("failed to create temp freezer dir: %v", err)

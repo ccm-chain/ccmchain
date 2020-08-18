@@ -28,8 +28,8 @@ import (
 	"github.com/ccm-chain/ccmchain/core/state"
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/core/vm"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/eth/downloader"
-	"github.com/ccm-chain/ccmchain/ethdb"
 	"github.com/ccm-chain/ccmchain/event"
 	"github.com/ccm-chain/ccmchain/params"
 	"github.com/ccm-chain/ccmchain/rpc"
@@ -42,7 +42,7 @@ type Backend interface {
 	Downloader() *downloader.Downloader
 	ProtocolVersion() int
 	SuggestPrice(ctx context.Context) (*big.Int, error)
-	ChainDb() ethdb.Database
+	ChainDb() database.Database
 	EventMux() *event.TypeMux
 	AccountManager() *accounts.Manager
 	ExtRPCEnabled() bool

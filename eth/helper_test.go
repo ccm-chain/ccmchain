@@ -34,8 +34,8 @@ import (
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/core/vm"
 	"github.com/ccm-chain/ccmchain/crypto"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/eth/downloader"
-	"github.com/ccm-chain/ccmchain/ethdb"
 	"github.com/ccm-chain/ccmchain/event"
 	"github.com/ccm-chain/ccmchain/p2p"
 	"github.com/ccm-chain/ccmchain/p2p/enode"
@@ -50,7 +50,7 @@ var (
 // newTestProtocolManager creates a new protocol manager for testing purposes,
 // with the given number of blocks already known, and potential notification
 // channels for different events.
-func newTestProtocolManager(mode downloader.SyncMode, blocks int, generator func(int, *core.BlockGen), newtx chan<- []*types.Transaction) (*ProtocolManager, ethdb.Database, error) {
+func newTestProtocolManager(mode downloader.SyncMode, blocks int, generator func(int, *core.BlockGen), newtx chan<- []*types.Transaction) (*ProtocolManager, database.Database, error) {
 	var (
 		evmux  = new(event.TypeMux)
 		engine = ethash.NewFaker()
@@ -78,7 +78,7 @@ func newTestProtocolManager(mode downloader.SyncMode, blocks int, generator func
 // with the given number of blocks already known, and potential notification
 // channels for different events. In case of an error, the constructor force-
 // fails the test.
-func newTestProtocolManagerMust(t *testing.T, mode downloader.SyncMode, blocks int, generator func(int, *core.BlockGen), newtx chan<- []*types.Transaction) (*ProtocolManager, ethdb.Database) {
+func newTestProtocolManagerMust(t *testing.T, mode downloader.SyncMode, blocks int, generator func(int, *core.BlockGen), newtx chan<- []*types.Transaction) (*ProtocolManager, database.Database) {
 	pm, db, err := newTestProtocolManager(mode, blocks, generator, newtx)
 	if err != nil {
 		t.Fatalf("Failed to create protocol manager: %v", err)

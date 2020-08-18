@@ -23,7 +23,7 @@ import (
 	"testing"
 
 	"github.com/ccm-chain/ccmchain/common"
-	"github.com/ccm-chain/ccmchain/ethdb/memorydb"
+	"github.com/ccm-chain/ccmchain/database/memorydb"
 )
 
 func TestIterator(t *testing.T) {

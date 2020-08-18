@@ -37,8 +37,8 @@ import (
 	"github.com/ccm-chain/ccmchain/core/rawdb"
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/crypto"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/eth"
-	"github.com/ccm-chain/ccmchain/ethdb"
 	"github.com/ccm-chain/ccmchain/event"
 	"github.com/ccm-chain/ccmchain/les/flowcontrol"
 	"github.com/ccm-chain/ccmchain/light"
@@ -154,7 +154,7 @@ func prepareTestchain(n int, backend *backends.SimulatedBackend) {
 }
 
 // testIndexers creates a set of indexers with specified params for testing purpose.
-func testIndexers(db ethdb.Database, odr light.OdrBackend, config *light.IndexerConfig) []*core.ChainIndexer {
+func testIndexers(db database.Database, odr light.OdrBackend, config *light.IndexerConfig) []*core.ChainIndexer {
 	var indexers [3]*core.ChainIndexer
 	indexers[0] = light.NewChtIndexer(db, odr, config.ChtSize, config.ChtConfirms)
 	indexers[1] = eth.NewBloomIndexer(db, config.BloomSize, config.BloomConfirms)
@@ -167,7 +167,7 @@ func testIndexers(db ethdb.Database, odr light.OdrBackend, config *light.Indexer
 // newTestProtocolManager creates a new protocol manager for testing purposes,
 // with the given number of blocks already known, potential notification
 // channels for different events and relative chain indexers array.
-func newTestProtocolManager(lightSync bool, blocks int, odr *LesOdr, indexers []*core.ChainIndexer, peers *peerSet, db ethdb.Database, ulcServers []string, ulcFraction int, testCost uint64, clock mclock.Clock) (*ProtocolManager, *backends.SimulatedBackend, error) {
+func newTestProtocolManager(lightSync bool, blocks int, odr *LesOdr, indexers []*core.ChainIndexer, peers *peerSet, db database.Database, ulcServers []string, ulcFraction int, testCost uint64, clock mclock.Clock) (*ProtocolManager, *backends.SimulatedBackend, error) {
 	var (
 		evmux  = new(event.TypeMux)
 		engine = ethash.NewFaker()
@@ -251,7 +251,7 @@ func newTestProtocolManager(lightSync bool, blocks int, odr *LesOdr, indexers []
 // with the given number of blocks already known, potential notification channels
 // for different events and relative chain indexers array. In case of an error, the
 // constructor force-fails the test.
-func newTestProtocolManagerMust(t *testing.T, lightSync bool, blocks int, odr *LesOdr, indexers []*core.ChainIndexer, peers *peerSet, db ethdb.Database, ulcServers []string, ulcFraction int) (*ProtocolManager, *backends.SimulatedBackend) {
+func newTestProtocolManagerMust(t *testing.T, lightSync bool, blocks int, odr *LesOdr, indexers []*core.ChainIndexer, peers *peerSet, db database.Database, ulcServers []string, ulcFraction int) (*ProtocolManager, *backends.SimulatedBackend) {
 	pm, backend, err := newTestProtocolManager(lightSync, blocks, odr, indexers, peers, db, ulcServers, ulcFraction, 0, &mclock.System{})
 	if err != nil {
 		t.Fatalf("Failed to create protocol manager: %v", err)
@@ -379,7 +379,7 @@ func (p *testPeer) close() {
 
 // TestEntity represents a network entity for testing with necessary auxiliary fields.
 type TestEntity struct {
-	db      ethdb.Database
+	db      database.Database
 	rPeer   *peer
 	tPeer   *testPeer
 	peers   *peerSet

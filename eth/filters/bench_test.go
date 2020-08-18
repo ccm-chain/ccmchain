@@ -27,7 +27,7 @@ import (
 	"github.com/ccm-chain/ccmchain/core/bloombits"
 	"github.com/ccm-chain/ccmchain/core/rawdb"
 	"github.com/ccm-chain/ccmchain/core/types"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/event"
 	"github.com/ccm-chain/ccmchain/node"
 )
@@ -147,7 +147,7 @@ func benchmarkBloomBits(b *testing.B, sectionSize uint64) {
 
 var bloomBitsPrefix = []byte("bloomBits-")
 
-func clearBloomBits(db ethdb.Database) {
+func clearBloomBits(db database.Database) {
 	fmt.Println("Clearing bloombits data...")
 	it := db.NewIteratorWithPrefix(bloomBitsPrefix)
 	for it.Next() {

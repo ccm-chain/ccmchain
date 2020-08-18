@@ -33,7 +33,7 @@ import (
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/core/vm"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/params"
 	"github.com/ccm-chain/ccmchain/rlp"
 	"golang.org/x/crypto/sha3"
@@ -194,7 +194,7 @@ func (t *StateTest) gasLimit(subtest StateSubtest) uint64 {
 	return t.json.Tx.GasLimit[t.json.Post[subtest.Fork][subtest.Index].Indexes.Gas]
 }
 
-func MakePreState(db ethdb.Database, accounts core.GenesisAlloc) *state.StateDB {
+func MakePreState(db database.Database, accounts core.GenesisAlloc) *state.StateDB {
 	sdb := state.NewDatabase(db)
 	statedb, _ := state.New(common.Hash{}, sdb)
 	for addr, a := range accounts {

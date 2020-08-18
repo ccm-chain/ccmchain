@@ -22,7 +22,7 @@ import (
 
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/rlp"
 )
 
@@ -115,7 +115,7 @@ func (db *NodeSet) NodeList() NodeList {
 }
 
 // Store writes the contents of the set to the given database
-func (db *NodeSet) Store(target ethdb.KeyValueWriter) {
+func (db *NodeSet) Store(target database.KeyValueWriter) {
 	db.lock.RLock()
 	defer db.lock.RUnlock()
 
@@ -128,7 +128,7 @@ func (db *NodeSet) Store(target ethdb.KeyValueWriter) {
 type NodeList []rlp.RawValue
 
 // Store writes the contents of the list to the given database
-func (n NodeList) Store(db ethdb.KeyValueWriter) {
+func (n NodeList) Store(db database.KeyValueWriter) {
 	for _, node := range n {
 		db.Put(crypto.Keccak256(node), node)
 	}

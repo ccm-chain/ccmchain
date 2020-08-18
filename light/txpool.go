@@ -27,7 +27,7 @@ import (
 	"github.com/ccm-chain/ccmchain/core/rawdb"
 	"github.com/ccm-chain/ccmchain/core/state"
 	"github.com/ccm-chain/ccmchain/core/types"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/event"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/params"
@@ -59,7 +59,7 @@ type TxPool struct {
 	mu           sync.RWMutex
 	chain        *LightChain
 	odr          OdrBackend
-	chainDb      ethdb.Database
+	chainDb      database.Database
 	relay        TxRelayBackend
 	head         common.Hash
 	nonce        map[common.Address]uint64            // "pending" nonce

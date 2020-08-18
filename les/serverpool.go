@@ -29,7 +29,7 @@ import (
 
 	"github.com/ccm-chain/ccmchain/common/mclock"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/p2p"
 	"github.com/ccm-chain/ccmchain/p2p/discv5"
@@ -112,7 +112,7 @@ type registerReq struct {
 // known light server nodes. It received discovered nodes, stores statistics about
 // known nodes and takes care of always having enough good quality servers connected.
 type serverPool struct {
-	db     ethdb.Database
+	db     database.Database
 	dbKey  []byte
 	server *p2p.Server
 	quit   chan struct{}
@@ -140,7 +140,7 @@ type serverPool struct {
 }
 
 // newServerPool creates a new serverPool instance
-func newServerPool(db ethdb.Database, quit chan struct{}, wg *sync.WaitGroup, trustedNodes []string) *serverPool {
+func newServerPool(db database.Database, quit chan struct{}, wg *sync.WaitGroup, trustedNodes []string) *serverPool {
 	pool := &serverPool{
 		db:           db,
 		quit:         quit,

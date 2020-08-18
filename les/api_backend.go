@@ -30,9 +30,9 @@ import (
 	"github.com/ccm-chain/ccmchain/core/state"
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/core/vm"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/eth/downloader"
 	"github.com/ccm-chain/ccmchain/eth/gasprice"
-	"github.com/ccm-chain/ccmchain/ethdb"
 	"github.com/ccm-chain/ccmchain/event"
 	"github.com/ccm-chain/ccmchain/light"
 	"github.com/ccm-chain/ccmchain/params"
@@ -184,7 +184,7 @@ func (b *LesApiBackend) SuggestPrice(ctx context.Context) (*big.Int, error) {
 	return b.gpo.SuggestPrice(ctx)
 }
 
-func (b *LesApiBackend) ChainDb() ethdb.Database {
+func (b *LesApiBackend) ChainDb() database.Database {
 	return b.eth.chainDb
 }
 

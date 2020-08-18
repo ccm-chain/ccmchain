@@ -37,7 +37,7 @@ import (
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/core/vm"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/node"
 	"github.com/ccm-chain/ccmchain/params"
@@ -100,7 +100,7 @@ type RetestWeb3API interface {
 }
 
 type RetestethAPI struct {
-	ethDb         ethdb.Database
+	ethDb         database.Database
 	db            state.Database
 	chainConfig   *params.ChainConfig
 	author        common.Address

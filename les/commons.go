@@ -21,8 +21,8 @@ import (
 
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/core"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/eth"
-	"github.com/ccm-chain/ccmchain/ethdb"
 	"github.com/ccm-chain/ccmchain/light"
 	"github.com/ccm-chain/ccmchain/p2p"
 	"github.com/ccm-chain/ccmchain/p2p/enode"
@@ -33,7 +33,7 @@ import (
 type lesCommons struct {
 	config                       *eth.Config
 	iConfig                      *light.IndexerConfig
-	chainDb                      ethdb.Database
+	chainDb                      database.Database
 	protocolManager              *ProtocolManager
 	chtIndexer, bloomTrieIndexer *core.ChainIndexer
 }

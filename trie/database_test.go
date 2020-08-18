@@ -20,7 +20,7 @@ import (
 	"testing"
 
 	"github.com/ccm-chain/ccmchain/common"
-	"github.com/ccm-chain/ccmchain/ethdb/memorydb"
+	"github.com/ccm-chain/ccmchain/database/memorydb"
 )
 
 // Tests that the trie database returns a missing trie node error if attempting

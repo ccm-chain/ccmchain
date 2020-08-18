@@ -30,9 +30,9 @@ import (
 
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/ethdb"
-	"github.com/ccm-chain/ccmchain/ethdb/leveldb"
-	"github.com/ccm-chain/ccmchain/ethdb/memorydb"
+	"github.com/ccm-chain/ccmchain/database"
+	"github.com/ccm-chain/ccmchain/database/leveldb"
+	"github.com/ccm-chain/ccmchain/database/memorydb"
 	"github.com/ccm-chain/ccmchain/rlp"
 	"github.com/davecgh/go-spew/spew"
 )
@@ -318,7 +318,7 @@ func TestLargeValue(t *testing.T) {
 }
 
 type countingDB struct {
-	ethdb.KeyValueStore
+	database.KeyValueStore
 	gets map[string]int
 }
 

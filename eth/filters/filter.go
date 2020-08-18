@@ -25,13 +25,13 @@ import (
 	"github.com/ccm-chain/ccmchain/core"
 	"github.com/ccm-chain/ccmchain/core/bloombits"
 	"github.com/ccm-chain/ccmchain/core/types"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/event"
 	"github.com/ccm-chain/ccmchain/rpc"
 )
 
 type Backend interface {
-	ChainDb() ethdb.Database
+	ChainDb() database.Database
 	EventMux() *event.TypeMux
 	HeaderByNumber(ctx context.Context, blockNr rpc.BlockNumber) (*types.Header, error)
 	HeaderByHash(ctx context.Context, blockHash common.Hash) (*types.Header, error)
@@ -51,7 +51,7 @@ type Backend interface {
 type Filter struct {
 	backend Backend
 
-	db        ethdb.Database
+	db        database.Database
 	addresses []common.Address
 	topics    [][]common.Hash
 

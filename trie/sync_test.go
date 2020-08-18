@@ -21,7 +21,7 @@ import (
 	"testing"
 
 	"github.com/ccm-chain/ccmchain/common"
-	"github.com/ccm-chain/ccmchain/ethdb/memorydb"
+	"github.com/ccm-chain/ccmchain/database/memorydb"
 )
 
 // makeTestTrie create a sample test trie to test node-wise reconstruction.

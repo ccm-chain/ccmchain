@@ -25,7 +25,7 @@ import (
 	"github.com/ccm-chain/ccmchain/core/state"
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/trie"
 )
 
@@ -141,7 +141,7 @@ func (t *odrTrie) GetKey(sha []byte) []byte {
 	return nil
 }
 
-func (t *odrTrie) Prove(key []byte, fromLevel uint, proofDb ethdb.KeyValueWriter) error {
+func (t *odrTrie) Prove(key []byte, fromLevel uint, proofDb database.KeyValueWriter) error {
 	return errors.New("not implemented, needs client/server interface split")
 }
 

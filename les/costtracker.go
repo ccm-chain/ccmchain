@@ -24,8 +24,8 @@ import (
 	"time"
 
 	"github.com/ccm-chain/ccmchain/common/mclock"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/eth"
-	"github.com/ccm-chain/ccmchain/ethdb"
 	"github.com/ccm-chain/ccmchain/les/flowcontrol"
 	"github.com/ccm-chain/ccmchain/log"
 )
@@ -113,7 +113,7 @@ const (
 // changes in the cost factor can be applied immediately without always notifying
 // the clients about the changed cost tables.
 type costTracker struct {
-	db     ethdb.Database
+	db     database.Database
 	stopCh chan chan struct{}
 
 	inSizeFactor  float64
@@ -131,7 +131,7 @@ type costTracker struct {
 
 // newCostTracker creates a cost tracker and loads the cost factor statistics from the database.
 // It also returns the minimum capacity that can be assigned to any peer.
-func newCostTracker(db ethdb.Database, config *eth.Config) (*costTracker, uint64) {
+func newCostTracker(db database.Database, config *eth.Config) (*costTracker, uint64) {
 	utilTarget := float64(config.LightServ) * flowcontrol.FixedPointMultiplier / 100
 	ct := &costTracker{
 		db:         db,

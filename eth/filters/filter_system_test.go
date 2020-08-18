@@ -32,7 +32,7 @@ import (
 	"github.com/ccm-chain/ccmchain/core/bloombits"
 	"github.com/ccm-chain/ccmchain/core/rawdb"
 	"github.com/ccm-chain/ccmchain/core/types"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/event"
 	"github.com/ccm-chain/ccmchain/params"
 	"github.com/ccm-chain/ccmchain/rpc"
@@ -40,7 +40,7 @@ import (
 
 type testBackend struct {
 	mux        *event.TypeMux
-	db         ethdb.Database
+	db         database.Database
 	sections   uint64
 	txFeed     *event.Feed
 	rmLogsFeed *event.Feed
@@ -48,7 +48,7 @@ type testBackend struct {
 	chainFeed  *event.Feed
 }
 
-func (b *testBackend) ChainDb() ethdb.Database {
+func (b *testBackend) ChainDb() database.Database {
 	return b.db
 }
 

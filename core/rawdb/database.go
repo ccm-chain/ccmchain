@@ -24,17 +24,17 @@ import (
 	"time"
 
 	"github.com/ccm-chain/ccmchain/common"
-	"github.com/ccm-chain/ccmchain/ethdb"
-	"github.com/ccm-chain/ccmchain/ethdb/leveldb"
-	"github.com/ccm-chain/ccmchain/ethdb/memorydb"
+	"github.com/ccm-chain/ccmchain/database"
+	"github.com/ccm-chain/ccmchain/database/leveldb"
+	"github.com/ccm-chain/ccmchain/database/memorydb"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/olekukonko/tablewriter"
 )
 
 // freezerdb is a database wrapper that enabled freezer data retrievals.
 type freezerdb struct {
-	ethdb.KeyValueStore
-	ethdb.AncientStore
+	database.KeyValueStore
+	database.AncientStore
 }
 
 // Close implements io.Closer, closing both the fast key-value store as well as
@@ -55,7 +55,7 @@ func (frdb *freezerdb) Close() error {
 
 // nofreezedb is a database wrapper that disables freezer data retrievals.
 type nofreezedb struct {
-	ethdb.KeyValueStore
+	database.KeyValueStore
 }
 
 // HasAncient returns an error as we don't have a backing chain freezer.
@@ -95,7 +95,7 @@ func (db *nofreezedb) Sync() error {
 
 // NewDatabase creates a high level database on top of a given key-value data
 // store without a freezer moving immutable chain segments into cold storage.
-func NewDatabase(db ethdb.KeyValueStore) ethdb.Database {
+func NewDatabase(db database.KeyValueStore) database.Database {
 	return &nofreezedb{
 		KeyValueStore: db,
 	}
@@ -104,7 +104,7 @@ func NewDatabase(db ethdb.KeyValueStore) ethdb.Database {
 // NewDatabaseWithFreezer creates a high level database on top of a given key-
 // value data store with a freezer moving immutable chain segments into cold
 // storage.
-func NewDatabaseWithFreezer(db ethdb.KeyValueStore, freezer string, namespace string) (ethdb.Database, error) {
+func NewDatabaseWithFreezer(db database.KeyValueStore, freezer string, namespace string) (database.Database, error) {
 	// Create the idle freezer instance
 	frdb, err := newFreezer(freezer, namespace)
 	if err != nil {
@@ -183,20 +183,20 @@ func NewDatabaseWithFreezer(db ethdb.KeyValueStore, freezer string, namespace st
 
 // NewMemoryDatabase creates an ephemeral in-memory key-value database without a
 // freezer moving immutable chain segments into cold storage.
-func NewMemoryDatabase() ethdb.Database {
+func NewMemoryDatabase() database.Database {
 	return NewDatabase(memorydb.New())
 }
 
 // NewMemoryDatabaseWithCap creates an ephemeral in-memory key-value database
 // with an initial starting capacity, but without a freezer moving immutable
 // chain segments into cold storage.
-func NewMemoryDatabaseWithCap(size int) ethdb.Database {
+func NewMemoryDatabaseWithCap(size int) database.Database {
 	return NewDatabase(memorydb.NewWithCap(size))
 }
 
 // NewLevelDBDatabase creates a persistent key-value database without a freezer
 // moving immutable chain segments into cold storage.
-func NewLevelDBDatabase(file string, cache int, handles int, namespace string) (ethdb.Database, error) {
+func NewLevelDBDatabase(file string, cache int, handles int, namespace string) (database.Database, error) {
 	db, err := leveldb.New(file, cache, handles, namespace)
 	if err != nil {
 		return nil, err
@@ -206,7 +206,7 @@ func NewLevelDBDatabase(file string, cache int, handles int, namespace string) (
 
 // NewLevelDBDatabaseWithFreezer creates a persistent key-value database with a
 // freezer moving immutable chain segments into cold storage.
-func NewLevelDBDatabaseWithFreezer(file string, cache int, handles int, freezer string, namespace string) (ethdb.Database, error) {
+func NewLevelDBDatabaseWithFreezer(file string, cache int, handles int, freezer string, namespace string) (database.Database, error) {
 	kvdb, err := leveldb.New(file, cache, handles, namespace)
 	if err != nil {
 		return nil, err
@@ -221,7 +221,7 @@ func NewLevelDBDatabaseWithFreezer(file string, cache int, handles int, freezer 
 
 // InspectDatabase traverses the entire database and checks the size
 // of all different categories of data.
-func InspectDatabase(db ethdb.Database) error {
+func InspectDatabase(db database.Database) error {
 	it := db.NewIterator()
 	defer it.Release()
 

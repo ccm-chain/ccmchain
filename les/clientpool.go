@@ -24,7 +24,7 @@ import (
 
 	"github.com/ccm-chain/ccmchain/common/mclock"
 	"github.com/ccm-chain/ccmchain/common/prque"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/p2p/enode"
 	"github.com/ccm-chain/ccmchain/rlp"
@@ -59,7 +59,7 @@ var (
 // values when necessary. Positive balances are stored in the database as long as
 // they exist, posBalanceQueue only acts as a cache for recently accessed entries.
 type clientPool struct {
-	db         ethdb.Database
+	db         database.Database
 	lock       sync.Mutex
 	clock      mclock.Clock
 	stopCh     chan chan struct{}
@@ -138,7 +138,7 @@ type priceFactors struct {
 }
 
 // newClientPool creates a new client pool
-func newClientPool(db ethdb.Database, freeClientCap uint64, queueLimit int, clock mclock.Clock, removePeer func(enode.ID)) *clientPool {
+func newClientPool(db database.Database, freeClientCap uint64, queueLimit int, clock mclock.Clock, removePeer func(enode.ID)) *clientPool {
 	pool := &clientPool{
 		db:              db,
 		clock:           clock,

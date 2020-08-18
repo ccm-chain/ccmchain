@@ -24,12 +24,12 @@ import (
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/core/rawdb"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	checker "gopkg.in/check.v1"
 )
 
 type StateSuite struct {
-	db    ethdb.Database
+	db    database.Database
 	state *StateDB
 }
 

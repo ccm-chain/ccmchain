@@ -26,7 +26,7 @@ import (
 	"time"
 
 	"github.com/ccm-chain/ccmchain/common"
-	"github.com/ccm-chain/ccmchain/ethdb"
+	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/metrics"
 	"github.com/ccm-chain/ccmchain/params"
@@ -251,7 +251,7 @@ func (f *freezer) Sync() error {
 //
 // This functionality is deliberately broken off from block importing to avoid
 // incurring additional data shuffling delays on block propagation.
-func (f *freezer) freeze(db ethdb.KeyValueStore) {
+func (f *freezer) freeze(db database.KeyValueStore) {
 	nfdb := &nofreezedb{KeyValueStore: db}
 
 	for {
