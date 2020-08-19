@@ -34,13 +34,13 @@ import (
 	"github.com/ccm-chain/ccmchain/cmd/utils"
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/console"
-	"github.com/ccm-chain/ccmchain/eth"
-	"github.com/ccm-chain/ccmchain/eth/downloader"
 	"github.com/ccm-chain/ccmchain/internal/debug"
 	"github.com/ccm-chain/ccmchain/les"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/metrics"
 	"github.com/ccm-chain/ccmchain/node"
+	"github.com/ccm-chain/ccmchain/protocol"
+	"github.com/ccm-chain/ccmchain/protocol/downloader"
 	"github.com/elastic/gosigar"
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -337,7 +337,7 @@ func startNode(ctx *cli.Context, stack *node.Node) {
 	// Set contract backend for ccmchain service if local node
 	// is serving LES requests.
 	if ctx.GlobalInt(utils.LightLegacyServFlag.Name) > 0 || ctx.GlobalInt(utils.LightServeFlag.Name) > 0 {
-		var ethService *eth.Ethereum
+		var ethService *protocol.Ethereum
 		if err := stack.Service(&ethService); err != nil {
 			utils.Fatalf("Failed to retrieve ccmchain service: %v", err)
 		}
@@ -416,7 +416,7 @@ func startNode(ctx *cli.Context, stack *node.Node) {
 		if ctx.GlobalString(utils.SyncModeFlag.Name) == "light" {
 			utils.Fatalf("Light clients do not support mining")
 		}
-		var ethereum *eth.Ethereum
+		var ethereum *protocol.Ethereum
 		if err := stack.Service(&ethereum); err != nil {
 			utils.Fatalf("Ccmchain service not running: %v", err)
 		}

@@ -47,8 +47,6 @@ import (
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/core"
 	"github.com/ccm-chain/ccmchain/core/types"
-	"github.com/ccm-chain/ccmchain/eth"
-	"github.com/ccm-chain/ccmchain/eth/downloader"
 	"github.com/ccm-chain/ccmchain/les"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/node"
@@ -57,6 +55,8 @@ import (
 	"github.com/ccm-chain/ccmchain/p2p/enode"
 	"github.com/ccm-chain/ccmchain/p2p/nat"
 	"github.com/ccm-chain/ccmchain/params"
+	"github.com/ccm-chain/ccmchain/protocol"
+	"github.com/ccm-chain/ccmchain/protocol/downloader"
 	"github.com/ccm-chain/ccmchain/stats"
 	"golang.org/x/net/websocket"
 )
@@ -237,7 +237,7 @@ func newFaucet(genesis *core.Genesis, port int, enodes []*discv5.Node, network u
 	}
 	// Assemble the Ethereum light client protocol
 	if err := stack.Register(func(ctx *node.ServiceContext) (node.Service, error) {
-		cfg := eth.DefaultConfig
+		cfg := protocol.DefaultConfig
 		cfg.SyncMode = downloader.LightSync
 		cfg.NetworkId = network
 		cfg.Genesis = genesis

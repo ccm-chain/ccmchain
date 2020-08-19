@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
-package eth
+package protocol
 
 import (
 	"fmt"
@@ -25,8 +25,8 @@ import (
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/eth/downloader"
 	"github.com/ccm-chain/ccmchain/p2p"
+	"github.com/ccm-chain/ccmchain/protocol/downloader"
 	"github.com/ccm-chain/ccmchain/rlp"
 )
 

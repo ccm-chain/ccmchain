@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
-package eth
+package protocol
 
 import (
 	"context"
@@ -31,10 +31,10 @@ import (
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/core/vm"
 	"github.com/ccm-chain/ccmchain/database"
-	"github.com/ccm-chain/ccmchain/eth/downloader"
-	"github.com/ccm-chain/ccmchain/eth/gasprice"
 	"github.com/ccm-chain/ccmchain/event"
 	"github.com/ccm-chain/ccmchain/params"
+	"github.com/ccm-chain/ccmchain/protocol/downloader"
+	"github.com/ccm-chain/ccmchain/protocol/gasprice"
 	"github.com/ccm-chain/ccmchain/rpc"
 )
 

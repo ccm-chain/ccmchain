@@ -17,7 +17,7 @@
 // This file contains some shares testing functionality, common to  multiple
 // different files and modules being tested.
 
-package eth
+package protocol
 
 import (
 	"crypto/ecdsa"
@@ -35,11 +35,11 @@ import (
 	"github.com/ccm-chain/ccmchain/core/vm"
 	"github.com/ccm-chain/ccmchain/crypto"
 	"github.com/ccm-chain/ccmchain/database"
-	"github.com/ccm-chain/ccmchain/eth/downloader"
 	"github.com/ccm-chain/ccmchain/event"
 	"github.com/ccm-chain/ccmchain/p2p"
 	"github.com/ccm-chain/ccmchain/p2p/enode"
 	"github.com/ccm-chain/ccmchain/params"
+	"github.com/ccm-chain/ccmchain/protocol/downloader"
 )
 
 var (

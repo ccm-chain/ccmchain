@@ -32,9 +32,9 @@ import (
 	"github.com/ccm-chain/ccmchain/core/rawdb"
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/eth"
 	"github.com/ccm-chain/ccmchain/node"
 	"github.com/ccm-chain/ccmchain/params"
+	"github.com/ccm-chain/ccmchain/protocol"
 )
 
 // Verify that Client implements the ethereum interfaces.
@@ -173,12 +173,12 @@ func newTestBackend(t *testing.T) (*node.Node, []*types.Block) {
 	genesis, blocks := generateTestChain()
 
 	// Start Ethereum service.
-	var ethservice *eth.Ethereum
+	var ethservice *protocol.Ethereum
 	n, err := node.New(&node.Config{})
 	n.Register(func(ctx *node.ServiceContext) (node.Service, error) {
-		config := &eth.Config{Genesis: genesis}
+		config := &protocol.Config{Genesis: genesis}
 		config.Ethash.PowMode = ethash.ModeFake
-		ethservice, err = eth.New(ctx, config)
+		ethservice, err = protocol.New(ctx, config)
 		return ethservice, err
 	})
 

@@ -30,10 +30,10 @@ import (
 	"github.com/ccm-chain/ccmchain/core/rawdb"
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/eth/downloader"
 	"github.com/ccm-chain/ccmchain/light"
 	"github.com/ccm-chain/ccmchain/p2p"
 	"github.com/ccm-chain/ccmchain/params"
+	"github.com/ccm-chain/ccmchain/protocol/downloader"
 	"github.com/ccm-chain/ccmchain/rlp"
 	"github.com/ccm-chain/ccmchain/trie"
 )

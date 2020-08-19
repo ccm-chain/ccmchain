@@ -23,9 +23,9 @@ import (
 
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/core/rawdb"
-	"github.com/ccm-chain/ccmchain/eth/downloader"
 	"github.com/ccm-chain/ccmchain/light"
 	"github.com/ccm-chain/ccmchain/log"
+	"github.com/ccm-chain/ccmchain/protocol/downloader"
 )
 
 var errInvalidCheckpoint = errors.New("invalid advertised checkpoint")

@@ -27,7 +27,6 @@ import (
 	"github.com/ccm-chain/ccmchain/core"
 	"github.com/ccm-chain/ccmchain/core/rawdb"
 	"github.com/ccm-chain/ccmchain/core/types"
-	"github.com/ccm-chain/ccmchain/eth"
 	"github.com/ccm-chain/ccmchain/les/flowcontrol"
 	"github.com/ccm-chain/ccmchain/light"
 	"github.com/ccm-chain/ccmchain/log"
@@ -35,6 +34,7 @@ import (
 	"github.com/ccm-chain/ccmchain/p2p/discv5"
 	"github.com/ccm-chain/ccmchain/p2p/enode"
 	"github.com/ccm-chain/ccmchain/params"
+	"github.com/ccm-chain/ccmchain/protocol"
 	"github.com/ccm-chain/ccmchain/rpc"
 )
 
@@ -61,7 +61,7 @@ type LesServer struct {
 	clientPool                              *clientPool
 }
 
-func NewLesServer(e *eth.Ethereum, config *eth.Config) (*LesServer, error) {
+func NewLesServer(e *protocol.Ethereum, config *protocol.Config) (*LesServer, error) {
 	lesTopics := make([]discv5.Topic, len(AdvertiseProtocolVersions))
 	for i, pv := range AdvertiseProtocolVersions {
 		lesTopics[i] = lesTopic(e.BlockChain().Genesis().Hash(), pv)

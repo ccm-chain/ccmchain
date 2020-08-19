@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
-package eth
+package protocol
 
 import (
 	"bufio"
@@ -35,9 +35,9 @@ import (
 	"github.com/ccm-chain/ccmchain/core/state"
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/core/vm"
-	"github.com/ccm-chain/ccmchain/eth/tracers"
 	"github.com/ccm-chain/ccmchain/internal/ethapi"
 	"github.com/ccm-chain/ccmchain/log"
+	"github.com/ccm-chain/ccmchain/protocol/tracers"
 	"github.com/ccm-chain/ccmchain/rlp"
 	"github.com/ccm-chain/ccmchain/rpc"
 	"github.com/ccm-chain/ccmchain/trie"

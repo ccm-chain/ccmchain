@@ -21,7 +21,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/ccm-chain/ccmchain/eth/tracers/internal/tracers"
+	"github.com/ccm-chain/ccmchain/protocol/tracers/internal/tracers"
 )
 
 // all contains all the built in JavaScript tracers by name.

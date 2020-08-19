@@ -36,9 +36,9 @@ import (
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/core/vm"
 	"github.com/ccm-chain/ccmchain/database"
-	"github.com/ccm-chain/ccmchain/eth/filters"
 	"github.com/ccm-chain/ccmchain/event"
 	"github.com/ccm-chain/ccmchain/params"
+	"github.com/ccm-chain/ccmchain/protocol/filters"
 	"github.com/ccm-chain/ccmchain/rpc"
 )
 

@@ -14,16 +14,16 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
-package eth
+package protocol
 
 import (
 	"sync/atomic"
 	"testing"
 	"time"
 
-	"github.com/ccm-chain/ccmchain/eth/downloader"
 	"github.com/ccm-chain/ccmchain/p2p"
 	"github.com/ccm-chain/ccmchain/p2p/enode"
+	"github.com/ccm-chain/ccmchain/protocol/downloader"
 )
 
 // Tests that fast sync gets disabled as soon as a real block is successfully

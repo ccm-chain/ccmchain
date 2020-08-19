@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
-package eth
+package protocol
 
 import (
 	"math/big"
@@ -27,10 +27,10 @@ import (
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/consensus/ethash"
 	"github.com/ccm-chain/ccmchain/core"
-	"github.com/ccm-chain/ccmchain/eth/downloader"
-	"github.com/ccm-chain/ccmchain/eth/gasprice"
 	"github.com/ccm-chain/ccmchain/miner"
 	"github.com/ccm-chain/ccmchain/params"
+	"github.com/ccm-chain/ccmchain/protocol/downloader"
+	"github.com/ccm-chain/ccmchain/protocol/gasprice"
 )
 
 // DefaultConfig contains default settings for use on the Ethereum main net.

@@ -29,8 +29,8 @@ import (
 	"github.com/ccm-chain/ccmchain/core/state"
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/core/vm"
-	"github.com/ccm-chain/ccmchain/eth/filters"
 	"github.com/ccm-chain/ccmchain/internal/ethapi"
+	"github.com/ccm-chain/ccmchain/protocol/filters"
 	"github.com/ccm-chain/ccmchain/rlp"
 	"github.com/ccm-chain/ccmchain/rpc"
 )
