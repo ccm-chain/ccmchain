@@ -16,7 +16,7 @@
 
 // Contains a wrapper for the Ethereum client.
 
-package geth
+package gccm
 
 import (
 	"math/big"

@@ -16,7 +16,7 @@
 
 // Contains a wrapper for the Whisper client.
 
-package geth
+package gccm
 
 import (
 	"github.com/ccm-chain/ccmchain/whisper/shhclient"
