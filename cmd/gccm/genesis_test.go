@@ -41,7 +41,7 @@ var customGenesisTests = []struct {
 			"parentHash" : "0x0000000000000000000000000000000000000000000000000000000000000000",
 			"timestamp"  : "0x00"
 		}`,
-		query:  "eth.getBlock(0).nonce",
+		query:  "ccm.getBlock(0).nonce",
 		result: "0x0000000000000042",
 	},
 	// Genesis file with an empty chain configuration (ensure missing fields work)
@@ -58,7 +58,7 @@ var customGenesisTests = []struct {
 			"timestamp"  : "0x00",
 			"config"     : {}
 		}`,
-		query:  "eth.getBlock(0).nonce",
+		query:  "ccm.getBlock(0).nonce",
 		result: "0x0000000000000042",
 	},
 	// Genesis file with specific chain configurations
@@ -77,7 +77,7 @@ var customGenesisTests = []struct {
 				"homesteadBlock" : 314
 			}
 		}`,
-		query:  "eth.getBlock(0).nonce",
+		query:  "ccm.getBlock(0).nonce",
 		result: "0x0000000000000042",
 	},
 }
@@ -98,11 +98,11 @@ func TestCustomGenesis(t *testing.T) {
 		runGeth(t, "--datadir", datadir, "init", json).WaitExit()
 
 		// Query the custom genesis block
-		geth := runGeth(t,
+		gccm := runGeth(t,
 			"--datadir", datadir, "--maxpeers", "0", "--port", "0",
 			"--nodiscover", "--nat", "none", "--ipcdisable",
 			"--exec", tt.query, "console")
-		geth.ExpectRegexp(tt.result)
-		geth.ExpectExit()
+		gccm.ExpectRegexp(tt.result)
+		gccm.ExpectExit()
 	}
 }
