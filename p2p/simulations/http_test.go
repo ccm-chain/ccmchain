@@ -420,16 +420,8 @@ type expectEvents struct {
 }
 
 func (t *expectEvents) nodeEvent(id string, up bool) *Event {
-	node := Node{
-		Config: &adapters.NodeConfig{
-			ID: enode.HexID(id),
-		},
-		up: up,
-	}
-	return &Event{
-		Type: EventTypeNode,
-		Node: &node,
-	}
+	config := &adapters.NodeConfig{ID: enode.HexID(id)}
+	return &Event{Type: EventTypeNode, Node: newNode(nil, config, up)}
 }
 
 func (t *expectEvents) connEvent(one, other string, up bool) *Event {

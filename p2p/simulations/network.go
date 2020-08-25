@@ -115,11 +115,9 @@ func (net *Network) NewNodeWithConfig(conf *adapters.NodeConfig) (*Node, error) 
 	if err != nil {
 		return nil, err
 	}
-	node := &Node{
-		Node:   adapterNode,
-		Config: conf,
-	}
+	node := newNode(adapterNode, conf, false)
 	log.Trace("Node created", "id", conf.ID)
+
 	net.nodeMap[conf.ID] = len(net.Nodes)
 	net.Nodes = append(net.Nodes, node)
 
@@ -631,15 +629,26 @@ type Node struct {
 
 	// up tracks whether or not the node is running
 	up   bool
-	upMu sync.RWMutex
+	upMu *sync.RWMutex
 }
 
+func newNode(an adapters.Node, ac *adapters.NodeConfig, up bool) *Node {
+	return &Node{Node: an, Config: ac, up: up, upMu: new(sync.RWMutex)}
+}
+
+func (n *Node) copy() *Node {
+	configCpy := *n.Config
+	return newNode(n.Node, &configCpy, n.Up())
+}
+
+// Up returns whether the node is currently up (online)
 func (n *Node) Up() bool {
 	n.upMu.RLock()
 	defer n.upMu.RUnlock()
 	return n.up
 }
 
+// SetUp sets the up (online) status of the nodes with the given value
 func (n *Node) SetUp(up bool) {
 	n.upMu.Lock()
 	defer n.upMu.Unlock()
@@ -695,8 +704,7 @@ func (n *Node) UnmarshalJSON(raw []byte) error {
 		return err
 	}
 
-	n.SetUp(node.Up)
-	n.Config = node.Config
+	*n = *newNode(nil, node.Config, node.Up)
 	return nil
 }
 
