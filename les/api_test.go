@@ -45,8 +45,8 @@ import (
 
 // Additional command line flags for the test binary.
 var (
-	loglevel = flag.Int("loglevel", 0, "verbosity of logs")
-	adapter  = flag.String("adapter", "exec", "type of simulation: sim|socket|exec|docker")
+	loglevel   = flag.Int("loglevel", 0, "verbosity of logs")
+	simAdapter = flag.String("adapter", "exec", "type of simulation: sim|socket|exec|docker")
 )
 
 func TestMain(m *testing.M) {
@@ -59,11 +59,9 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-/*
-This test is not meant to be a part of the automatic testing process because it
-runs for a long time and also requires a large database in order to do a meaningful
-request performance test. When testServerDataDir is empty, the test is skipped.
-*/
+// This test is not meant to be a part of the automatic testing process because it
+// runs for a long time and also requires a large database in order to do a meaningful
+// request performance test. When testServerDataDir is empty, the test is skipped.
 
 const (
 	testServerDataDir  = "" // should always be empty on the master branch
@@ -94,18 +92,15 @@ func TestCapacityAPI10(t *testing.T) {
 // while connected and going back and forth between free and priority mode with
 // the supplied API calls is also thoroughly tested.
 func testCapacityAPI(t *testing.T, clientCount int) {
+	// Skip test if no data dir specified
 	if testServerDataDir == "" {
-		// Skip test if no data dir specified
 		return
 	}
-
 	for !testSim(t, 1, clientCount, []string{testServerDataDir}, nil, func(ctx context.Context, net *simulations.Network, servers []*simulations.Node, clients []*simulations.Node) bool {
 		if len(servers) != 1 {
 			t.Fatalf("Invalid number of servers: %d", len(servers))
 		}
 		server := servers[0]
-
-		clientRpcClients := make([]*rpc.Client, len(clients))
 
 		serverRpcClient, err := server.Client()
 		if err != nil {
@@ -121,13 +116,13 @@ func testCapacityAPI(t *testing.T, clientCount int) {
 		}
 		freeIdx := rand.Intn(len(clients))
 
+		clientRpcClients := make([]*rpc.Client, len(clients))
 		for i, client := range clients {
 			var err error
 			clientRpcClients[i], err = client.Client()
 			if err != nil {
 				t.Fatalf("Failed to obtain rpc client: %v", err)
 			}
-
 			t.Log("connecting client", i)
 			if i != freeIdx {
 				setCapacity(ctx, t, serverRpcClient, client.ID(), testCap/uint64(len(clients)))
@@ -154,10 +149,13 @@ func testCapacityAPI(t *testing.T, clientCount int) {
 
 		reqCount := make([]uint64, len(clientRpcClients))
 
+		// Send light request like crazy.
 		for i, c := range clientRpcClients {
 			wg.Add(1)
 			i, c := i, c
 			go func() {
+				defer wg.Done()
+
 				queue := make(chan struct{}, 100)
 				reqCount[i] = 0
 				for {
@@ -165,10 +163,8 @@ func testCapacityAPI(t *testing.T, clientCount int) {
 					case queue <- struct{}{}:
 						select {
 						case <-stop:
-							wg.Done()
 							return
 						case <-ctx.Done():
-							wg.Done()
 							return
 						default:
 							wg.Add(1)
@@ -185,10 +181,8 @@ func testCapacityAPI(t *testing.T, clientCount int) {
 							}()
 						}
 					case <-stop:
-						wg.Done()
 						return
 					case <-ctx.Done():
-						wg.Done()
 						return
 					}
 				}
@@ -404,7 +398,7 @@ var services = adapters.Services{
 }
 
 func NewNetwork() (*simulations.Network, func(), error) {
-	adapter, adapterTeardown, err := NewAdapter(*adapter, services)
+	adapter, adapterTeardown, err := NewAdapter(*simAdapter, services)
 	if err != nil {
 		return nil, adapterTeardown, err
 	}
@@ -417,7 +411,6 @@ func NewNetwork() (*simulations.Network, func(), error) {
 		adapterTeardown()
 		net.Shutdown()
 	}
-
 	return net, teardown, nil
 }
 
@@ -515,7 +508,6 @@ func newLesServerService(ctx *adapters.ServiceContext) (node.Service, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	server, err := NewLesServer(ethereum, &config)
 	if err != nil {
 		return nil, err

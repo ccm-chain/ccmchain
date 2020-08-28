@@ -1,6 +1,6 @@
 Hi there,
 
-please note that this is an issue tracker reserved for bug reports and feature requests.
+Please note that this is an issue tracker reserved for bug reports and feature requests.
 
 #### System information
 

@@ -6,8 +6,6 @@ run:
   # default is true. Enables skipping of directories:
   #   vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
   skip-dirs-use-default: true
-  skip-files:
-    - core/genesis_alloc.go
 
 linters:
   disable-all: true
@@ -45,6 +43,3 @@ issues:
     - path: core/vm/instructions_test.go
       linters:
         - goconst
-    - path: cmd/faucet/
-      linters:
-        - deadcode
