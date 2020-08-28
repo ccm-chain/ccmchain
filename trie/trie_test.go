@@ -30,7 +30,6 @@ import (
 
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/database/leveldb"
 	"github.com/ccm-chain/ccmchain/database/memorydb"
 	"github.com/ccm-chain/ccmchain/rlp"
@@ -315,16 +314,6 @@ func TestLargeValue(t *testing.T) {
 	trie.Update([]byte("key1"), []byte{99, 99, 99, 99})
 	trie.Update([]byte("key2"), bytes.Repeat([]byte{1}, 32))
 	trie.Hash()
-}
-
-type countingDB struct {
-	database.KeyValueStore
-	gets map[string]int
-}
-
-func (db *countingDB) Get(key []byte) ([]byte, error) {
-	db.gets[string(key)]++
-	return db.KeyValueStore.Get(key)
 }
 
 // randTest performs random trie operations.
