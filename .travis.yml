@@ -18,29 +18,19 @@ jobs:
     - stage: build
       os: linux
       dist: xenial
-      go: 1.11.x
-      env:
-        - GO111MODULE=on
-      script:
-        - go run build/ci.go install
-        - go run build/ci.go test -coverage $TEST_PACKAGES
-
-    - stage: build
-      os: linux
-      dist: xenial
-      go: 1.12.x
-      env:
-        - GO111MODULE=on
-      script:
-        - go run build/ci.go install
-        - go run build/ci.go test -coverage $TEST_PACKAGES
-
-    # These are the latest Go versions.
-    - stage: build
-      os: linux
-      arch: amd64
-      dist: xenial
       go: 1.13.x
+      env:
+        - GO111MODULE=on
+      script:
+        - go run build/ci.go install
+        - go run build/ci.go test -coverage $TEST_PACKAGES
+
+    - stage: build
+      os: linux
+      dist: xenial
+      go: 1.14.x
+      env:
+        - GO111MODULE=on
       script:
         - go run build/ci.go install
         - go run build/ci.go test -coverage $TEST_PACKAGES
@@ -50,14 +40,14 @@ jobs:
       os: linux
       arch: arm64
       dist: xenial
-      go: 1.13.x
+      go: 1.14.x
       script:
         - go run build/ci.go install
         - go run build/ci.go test -coverage $TEST_PACKAGES
 
     - stage: build
       os: osx
-      go: 1.13.x
+      go: 1.14.x
       script:
         - echo "Increase the maximum number of open file descriptors on macOS"
         - NOFILE=20480
