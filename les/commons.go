@@ -21,12 +21,16 @@ import (
 	"math/big"
 	"sync"
 
+	"github.com/ccm-chain/ccmchain/client"
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/core"
 	"github.com/ccm-chain/ccmchain/core/rawdb"
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/database"
+	"github.com/ccm-chain/ccmchain/les/checkpointoracle"
 	"github.com/ccm-chain/ccmchain/light"
+	"github.com/ccm-chain/ccmchain/log"
+	"github.com/ccm-chain/ccmchain/node"
 	"github.com/ccm-chain/ccmchain/p2p"
 	"github.com/ccm-chain/ccmchain/p2p/discv5"
 	"github.com/ccm-chain/ccmchain/p2p/enode"
@@ -60,10 +64,9 @@ type lesCommons struct {
 	chainConfig                  *params.ChainConfig
 	iConfig                      *light.IndexerConfig
 	chainDb                      database.Database
-	peers                        *peerSet
 	chainReader                  chainReader
 	chtIndexer, bloomTrieIndexer *core.ChainIndexer
-	oracle                       *checkpointOracle
+	oracle                       *checkpointoracle.CheckpointOracle
 
 	closeCh chan struct{}
 	wg      sync.WaitGroup
@@ -81,7 +84,7 @@ type NodeInfo struct {
 }
 
 // makeProtocols creates protocol descriptors for the given LES versions.
-func (c *lesCommons) makeProtocols(versions []uint, runPeer func(version uint, p *p2p.Peer, rw p2p.MsgReadWriter) error, peerInfo func(id enode.ID) interface{}) []p2p.Protocol {
+func (c *lesCommons) makeProtocols(versions []uint, runPeer func(version uint, p *p2p.Peer, rw p2p.MsgReadWriter) error, peerInfo func(id enode.ID) interface{}, dialCandidates enode.Iterator) []p2p.Protocol {
 	protos := make([]p2p.Protocol, len(versions))
 	for i, version := range versions {
 		version := version
@@ -93,7 +96,8 @@ func (c *lesCommons) makeProtocols(versions []uint, runPeer func(version uint, p
 			Run: func(peer *p2p.Peer, rw p2p.MsgReadWriter) error {
 				return runPeer(version, peer, rw)
 			},
-			PeerInfo: peerInfo,
+			PeerInfo:       peerInfo,
+			DialCandidates: dialCandidates,
 		}
 	}
 	return protos
@@ -143,4 +147,27 @@ func (c *lesCommons) localCheckpoint(index uint64) params.TrustedCheckpoint {
 		CHTRoot:      light.GetChtRoot(c.chainDb, index, sectionHead),
 		BloomRoot:    light.GetBloomTrieRoot(c.chainDb, index, sectionHead),
 	}
+}
+
+// setupOracle sets up the checkpoint oracle contract client.
+func (c *lesCommons) setupOracle(node *node.Node, genesis common.Hash, ethconfig *protocol.Config) *checkpointoracle.CheckpointOracle {
+	config := ethconfig.CheckpointOracle
+	if config == nil {
+		// Try loading default config.
+		config = params.CheckpointOracles[genesis]
+	}
+	if config == nil {
+		log.Info("Checkpoint registrar is not enabled")
+		return nil
+	}
+	if config.Address == (common.Address{}) || uint64(len(config.Signers)) < config.Threshold {
+		log.Warn("Invalid checkpoint registrar config")
+		return nil
+	}
+	oracle := checkpointoracle.New(config, c.localCheckpoint)
+	rpcClient, _ := node.Attach()
+	client := client.NewClient(rpcClient)
+	oracle.Start(client)
+	log.Info("Configured checkpoint registrar", "address", config.Address, "signers", len(config.Signers), "threshold", config.Threshold)
+	return oracle
 }
