@@ -51,7 +51,9 @@ func TestConsoleWelcome(t *testing.T) {
 	gccm.SetTemplateFunc("goarch", func() string { return runtime.GOARCH })
 	gccm.SetTemplateFunc("gover", runtime.Version)
 	gccm.SetTemplateFunc("gethver", func() string { return params.VersionWithCommit("", "") })
-	gccm.SetTemplateFunc("niltime", func() string { return time.Unix(0, 0).Format(time.RFC1123) })
+	gccm.SetTemplateFunc("niltime", func() string {
+		return time.Unix(0, 0).Format("Mon Jan 02 2006 15:04:05 GMT-0700 (MST)")
+	})
 	gccm.SetTemplateFunc("apis", func() string { return ipcAPIs })
 
 	// Verify the actual welcome message to the required template
@@ -71,7 +73,7 @@ at block: 0 ({{niltime}})
 
 // Tests that a console can be attached to a running node via various means.
 func TestIPCAttachWelcome(t *testing.T) {
-	// Configure the instance for IPC attachement
+	// Configure the instance for IPC attachment
 	coinbase := "0x8605cdbbdb6d264aa742e77020dcbc58fcdce182"
 	var ipc string
 	if runtime.GOOS == "windows" {
@@ -87,11 +89,14 @@ func TestIPCAttachWelcome(t *testing.T) {
 		"--port", "0", "--maxpeers", "0", "--nodiscover", "--nat", "none",
 		"--coinbase", coinbase, "--shh", "--ipcpath", ipc)
 
+	defer func() {
+		gccm.Interrupt()
+		gccm.ExpectExit()
+	}()
+
 	waitForEndpoint(t, ipc, 3*time.Second)
 	testAttachWelcome(t, gccm, "ipc:"+ipc, ipcAPIs)
 
-	gccm.Interrupt()
-	gccm.ExpectExit()
 }
 
 func TestHTTPAttachWelcome(t *testing.T) {
@@ -99,14 +104,15 @@ func TestHTTPAttachWelcome(t *testing.T) {
 	port := strconv.Itoa(trulyRandInt(1024, 65536)) // Yeah, sometimes this will fail, sorry :P
 	gccm := runGeth(t,
 		"--port", "0", "--maxpeers", "0", "--nodiscover", "--nat", "none",
-		"--coinbase", coinbase, "--rpc", "--rpcport", port)
+		"--coinbase", coinbase, "--http", "--http.port", port)
+	defer func() {
+		gccm.Interrupt()
+		gccm.ExpectExit()
+	}()
 
 	endpoint := "http://127.0.0.1:" + port
 	waitForEndpoint(t, endpoint, 3*time.Second)
 	testAttachWelcome(t, gccm, endpoint, httpAPIs)
-
-	gccm.Interrupt()
-	gccm.ExpectExit()
 }
 
 func TestWSAttachWelcome(t *testing.T) {
@@ -115,14 +121,15 @@ func TestWSAttachWelcome(t *testing.T) {
 
 	gccm := runGeth(t,
 		"--port", "0", "--maxpeers", "0", "--nodiscover", "--nat", "none",
-		"--coinbase", coinbase, "--ws", "--wsport", port)
+		"--coinbase", coinbase, "--ws", "--ws.port", port)
+	defer func() {
+		gccm.Interrupt()
+		gccm.ExpectExit()
+	}()
 
 	endpoint := "ws://127.0.0.1:" + port
 	waitForEndpoint(t, endpoint, 3*time.Second)
 	testAttachWelcome(t, gccm, endpoint, httpAPIs)
-
-	gccm.Interrupt()
-	gccm.ExpectExit()
 }
 
 func testAttachWelcome(t *testing.T, gccm *testgeth, endpoint, apis string) {
@@ -137,7 +144,9 @@ func testAttachWelcome(t *testing.T, gccm *testgeth, endpoint, apis string) {
 	attach.SetTemplateFunc("gover", runtime.Version)
 	attach.SetTemplateFunc("gethver", func() string { return params.VersionWithCommit("", "") })
 	attach.SetTemplateFunc("coinbase", func() string { return gccm.Coinbase })
-	attach.SetTemplateFunc("niltime", func() string { return time.Unix(0, 0).Format(time.RFC1123) })
+	attach.SetTemplateFunc("niltime", func() string {
+		return time.Unix(0, 0).Format("Mon Jan 02 2006 15:04:05 GMT-0700 (MST)")
+	})
 	attach.SetTemplateFunc("ipc", func() bool { return strings.HasPrefix(endpoint, "ipc") })
 	attach.SetTemplateFunc("datadir", func() string { return gccm.Datadir })
 	attach.SetTemplateFunc("apis", func() string { return apis })

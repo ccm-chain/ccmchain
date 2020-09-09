@@ -43,7 +43,7 @@ var (
 		Description: `
 The Gccm console is an interactive shell for the JavaScript runtime environment
 which exposes a node admin interface as well as the Ðapp JavaScript API.
-See https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console.`,
+See https://github.com/ccm-chain/ccmchain/wiki/JavaScript-Console.`,
 	}
 
 	attachCommand = cli.Command{
@@ -56,7 +56,7 @@ See https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console.`,
 		Description: `
 The Gccm console is an interactive shell for the JavaScript runtime environment
 which exposes a node admin interface as well as the Ðapp JavaScript API.
-See https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console.
+See https://github.com/ccm-chain/ccmchain/wiki/JavaScript-Console.
 This command allows to open a console on a running gccm node.`,
 	}
 
@@ -69,7 +69,7 @@ This command allows to open a console on a running gccm node.`,
 		Category:  "CONSOLE COMMANDS",
 		Description: `
 The JavaScript VM exposes a node admin interface as well as the Ðapp
-JavaScript API. See https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console`,
+JavaScript API. See https://github.com/ccm-chain/ccmchain/wiki/JavaScript-Console`,
 	}
 )
 
@@ -78,12 +78,12 @@ JavaScript API. See https://github.com/ethereum/go-ethereum/wiki/JavaScript-Cons
 func localConsole(ctx *cli.Context) error {
 	// Create and start the node based on the CLI flags
 	prepare(ctx)
-	node := makeFullNode(ctx)
-	startNode(ctx, node)
-	defer node.Close()
+	stack, backend := makeFullNode(ctx)
+	startNode(ctx, stack, backend)
+	defer stack.Close()
 
 	// Attach to the newly started node and start the JavaScript console
-	client, err := node.Attach()
+	client, err := stack.Attach()
 	if err != nil {
 		utils.Fatalf("Failed to attach to the inproc gccm: %v", err)
 	}
@@ -177,12 +177,12 @@ func dialRPC(endpoint string) (*rpc.Client, error) {
 // everything down.
 func ephemeralConsole(ctx *cli.Context) error {
 	// Create and start the node based on the CLI flags
-	node := makeFullNode(ctx)
-	startNode(ctx, node)
-	defer node.Close()
+	stack, backend := makeFullNode(ctx)
+	startNode(ctx, stack, backend)
+	defer stack.Close()
 
 	// Attach to the newly started node and start the JavaScript console
-	client, err := node.Attach()
+	client, err := stack.Attach()
 	if err != nil {
 		utils.Fatalf("Failed to attach to the inproc gccm: %v", err)
 	}

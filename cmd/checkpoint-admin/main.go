@@ -22,23 +22,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ccm-chain/ccmchain/cmd/utils"
 	"github.com/ccm-chain/ccmchain/common/fdlimit"
+	"github.com/ccm-chain/ccmchain/internal/flags"
 	"github.com/ccm-chain/ccmchain/log"
 	"gopkg.in/urfave/cli.v1"
-)
-
-const (
-	commandHelperTemplate = `{{.Name}}{{if .Subcommands}} command{{end}}{{if .Flags}} [command options]{{end}} [arguments...]
-{{if .Description}}{{.Description}}
-{{end}}{{if .Subcommands}}
-SUBCOMMANDS:
-	{{range .Subcommands}}{{.Name}}{{with .ShortName}}, {{.}}{{end}}{{ "\t" }}{{.Usage}}
-	{{end}}{{end}}{{if .Flags}}
-OPTIONS:
-{{range $.Flags}}{{"\t"}}{{.}}
-{{end}}
-{{end}}`
 )
 
 var (
@@ -50,7 +37,7 @@ var (
 var app *cli.App
 
 func init() {
-	app = utils.NewApp(gitCommit, gitDate, "ethereum checkpoint helper tool")
+	app = flags.NewApp(gitCommit, gitDate, "ccmchain checkpoint helper tool")
 	app.Commands = []cli.Command{
 		commandStatus,
 		commandDeploy,
@@ -61,7 +48,7 @@ func init() {
 		oracleFlag,
 		nodeURLFlag,
 	}
-	cli.CommandHelpTemplate = commandHelperTemplate
+	cli.CommandHelpTemplate = flags.OriginCommandHelpTemplate
 }
 
 // Commonly used command line flags.

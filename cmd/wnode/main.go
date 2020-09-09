@@ -38,7 +38,7 @@ import (
 	"github.com/ccm-chain/ccmchain/cmd/utils"
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/common/hexutil"
-	"github.com/ccm-chain/ccmchain/console"
+	"github.com/ccm-chain/ccmchain/console/prompt"
 	"github.com/ccm-chain/ccmchain/crypto"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/p2p"
@@ -210,7 +210,7 @@ func initialize() {
 
 	if *mailServerMode {
 		if len(msPassword) == 0 {
-			msPassword, err = console.Stdin.PromptPassword("Please enter the Mail Server password: ")
+			msPassword, err = prompt.Stdin.PromptPassword("Please enter the Mail Server password: ")
 			if err != nil {
 				utils.Fatalf("Failed to read Mail Server password: %s", err)
 			}
@@ -221,8 +221,7 @@ func initialize() {
 		MaxMessageSize:     uint32(*argMaxSize),
 		MinimumAcceptedPOW: *argPoW,
 	}
-
-	shh = whisper.New(cfg)
+	shh = whisper.StandaloneWhisperService(cfg)
 
 	if *argPoW != whisper.DefaultMinimumPoW {
 		err := shh.SetMinimumPoW(*argPoW)
@@ -346,7 +345,7 @@ func configureNode() {
 	if *requestMail {
 		p2pAccept = true
 		if len(msPassword) == 0 {
-			msPassword, err = console.Stdin.PromptPassword("Please enter the Mail Server password: ")
+			msPassword, err = prompt.Stdin.PromptPassword("Please enter the Mail Server password: ")
 			if err != nil {
 				utils.Fatalf("Failed to read Mail Server password: %s", err)
 			}
@@ -355,7 +354,7 @@ func configureNode() {
 
 	if !*asymmetricMode && !*forwarderMode {
 		if len(symPass) == 0 {
-			symPass, err = console.Stdin.PromptPassword("Please enter the password for symmetric encryption: ")
+			symPass, err = prompt.Stdin.PromptPassword("Please enter the password for symmetric encryption: ")
 			if err != nil {
 				utils.Fatalf("Failed to read password: %v", err)
 			}
@@ -433,7 +432,7 @@ func run() {
 		return
 	}
 	defer server.Stop()
-	shh.Start(nil)
+	shh.Start()
 	defer shh.Stop()
 
 	if !*forwarderMode {
@@ -599,6 +598,7 @@ func messageLoop() {
 	}
 
 	ticker := time.NewTicker(time.Millisecond * 50)
+	defer ticker.Stop()
 
 	for {
 		select {

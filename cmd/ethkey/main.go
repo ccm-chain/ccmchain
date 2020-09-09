@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ccm-chain/ccmchain/cmd/utils"
+	"github.com/ccm-chain/ccmchain/internal/flags"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -35,7 +35,7 @@ var gitDate = ""
 var app *cli.App
 
 func init() {
-	app = utils.NewApp(gitCommit, gitDate, "an Ethereum key manager")
+	app = flags.NewApp(gitCommit, gitDate, "an Ccmchain key manager")
 	app.Commands = []cli.Command{
 		commandGenerate,
 		commandInspect,
@@ -43,6 +43,7 @@ func init() {
 		commandSignMessage,
 		commandVerifyMessage,
 	}
+	cli.CommandHelpTemplate = flags.OriginCommandHelpTemplate
 }
 
 // Commonly used command line flags.

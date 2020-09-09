@@ -32,7 +32,7 @@ func MainnetGenesis() string {
 	return ""
 }
 
-// TestnetGenesis returns the JSON spec to use for the Ethereum test network.
+// TestnetGenesis returns the JSON spec to use for the Ropsten test network.
 func TestnetGenesis() string {
 	enc, err := json.Marshal(core.DefaultTestnetGenesisBlock())
 	if err != nil {
@@ -44,8 +44,8 @@ func TestnetGenesis() string {
 // FoundationBootnodes returns the enode URLs of the P2P bootstrap nodes operated
 // by the foundation running the V5 discovery protocol.
 func FoundationBootnodes() *Enodes {
-	nodes := &Enodes{nodes: make([]*discv5.Node, len(params.DiscoveryV5Bootnodes))}
-	for i, url := range params.DiscoveryV5Bootnodes {
+	nodes := &Enodes{nodes: make([]*discv5.Node, len(params.MainnetBootnodes))}
+	for i, url := range params.MainnetBootnodes {
 		nodes.nodes[i] = discv5.MustParseNode(url)
 	}
 	return nodes
