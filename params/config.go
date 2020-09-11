@@ -27,8 +27,8 @@ import (
 
 // Genesis hashes to enforce below configs on.
 var (
-	MainnetGenesisHash = common.HexToHash("0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3")
-	TestnetGenesisHash = common.HexToHash("0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d")
+	MainnetGenesisHash = common.HexToHash("0x1672a3f8e0b381e42e0f9e7aa81298d29d6e8fa64699d3ef2588a3aad34b0d4a")
+	TestnetGenesisHash = common.HexToHash("0xc9307a9f52bad0ff7339ed509ac20cfd84b7aef924e246da8802fd2ac378ea4c")
 )
 
 // TrustedCheckpoints associates each known checkpoint with the genesis hash of
@@ -48,24 +48,21 @@ var CheckpointOracles = map[common.Hash]*CheckpointOracleConfig{
 var (
 	// MainnetChainConfig is the chain parameters to run a node on the main network.
 	MainnetChainConfig = &ChainConfig{
-		ChainID:             big.NewInt(10),
-		HomesteadBlock:      big.NewInt(0),
-		EIP150Block:         big.NewInt(0),
-		EIP150Hash:          common.Hash{},
-		EIP155Block:         big.NewInt(0),
-		EIP158Block:         big.NewInt(0),
-		ByzantiumBlock:      big.NewInt(0),
-		ConstantinopleBlock: big.NewInt(0),
-		PetersburgBlock:     big.NewInt(0),
-		Ethash:              new(EthashConfig),
+		ChainID:        big.NewInt(10),
+		HomesteadBlock: big.NewInt(0),
+		EIP150Block:    big.NewInt(0),
+		EIP150Hash:     common.Hash{},
+		EIP155Block:    big.NewInt(0),
+		EIP158Block:    big.NewInt(0),
+		Ethash:         new(EthashConfig),
 	}
 
 	// MainnetTrustedCheckpoint contains the light client trusted checkpoint for the main network.
 	MainnetTrustedCheckpoint = &TrustedCheckpoint{
-		SectionIndex: 249,
-		SectionHead:  common.HexToHash("0x0d656b0cc0e9901c9dfc6b6944962ad10286969b5e65cff2b21228ffa3201b45"),
-		CHTRoot:      common.HexToHash("0xe97cdc4a54f6bcae09acd8f7d9b2fecc6baa58cc30e12fc1c848d4b736060389"),
-		BloomRoot:    common.HexToHash("0xe028d4fe19fccd10c845b609dbed0778217298c352e3f588aa1351e9e7b836ca"),
+		SectionIndex: 54,
+		SectionHead:  common.HexToHash("0x151da4bd1990136fcfc2e222b91e86a0d2e37e0a02cdc4a58c91058366b89bd0"),
+		CHTRoot:      common.HexToHash("0x1d23d5aeab34324e3d914ecc35131af6a5c7846477d6d0f201b4fcf84058424e"),
+		BloomRoot:    common.HexToHash("0x109bddf4ffe13eeb415402157e4663bb2a8b393dbdceb0293c362dc980e34fc5"),
 	}
 
 	// MainnetCheckpointOracle contains a set of configs for the main network oracle.
