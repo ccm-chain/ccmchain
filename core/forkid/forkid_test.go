@@ -43,15 +43,15 @@ func TestCreation(t *testing.T) {
 			params.MainnetChainConfig,
 			params.MainnetGenesisHash,
 			[]testcase{
-				{0, ID{Hash: checksumToBytes(0xfc64ec04), Next: 0}},       // Unsynced
-				{1149999, ID{Hash: checksumToBytes(0xfc64ec04), Next: 0}}, // Last Frontier block
-				{1150000, ID{Hash: checksumToBytes(0xfc64ec04), Next: 0}}, // First Homestead block
-				{1919999, ID{Hash: checksumToBytes(0xfc64ec04), Next: 0}}, // Last Homestead block
-				{4370000, ID{Hash: checksumToBytes(0xfc64ec04), Next: 0}}, // First Byzantium block
-				{7279999, ID{Hash: checksumToBytes(0xfc64ec04), Next: 0}}, // Last Byzantium block
-				{7280000, ID{Hash: checksumToBytes(0xfc64ec04), Next: 0}}, // First and last Constantinople, first Petersburg block
-				{7987396, ID{Hash: checksumToBytes(0xfc64ec04), Next: 0}}, // Today Petersburg block
-				{1769535, ID{Hash: checksumToBytes(0xfc64ec04), Next: 0}}, // Today block
+				{0, ID{Hash: checksumToBytes(0x659dd140), Next: 0}},       // Unsynced
+				{1149999, ID{Hash: checksumToBytes(0x659dd140), Next: 0}}, // Last Frontier block
+				{1150000, ID{Hash: checksumToBytes(0x659dd140), Next: 0}}, // First Homestead block
+				{1919999, ID{Hash: checksumToBytes(0x659dd140), Next: 0}}, // Last Homestead block
+				{4370000, ID{Hash: checksumToBytes(0x659dd140), Next: 0}}, // First Byzantium block
+				{7279999, ID{Hash: checksumToBytes(0x659dd140), Next: 0}}, // Last Byzantium block
+				{7280000, ID{Hash: checksumToBytes(0x659dd140), Next: 0}}, // First and last Constantinople, first Petersburg block
+				{7987396, ID{Hash: checksumToBytes(0x659dd140), Next: 0}}, // Today Petersburg block
+				{1769535, ID{Hash: checksumToBytes(0x659dd140), Next: 0}}, // Today block
 			},
 		},
 		// Ropsten test cases
@@ -59,16 +59,16 @@ func TestCreation(t *testing.T) {
 			params.TestnetChainConfig,
 			params.TestnetGenesisHash,
 			[]testcase{
-				{0, ID{Hash: checksumToBytes(0x30c7ddbc), Next: 0}},       // Unsynced, last Frontier, Homestead and first Tangerine block
-				{9, ID{Hash: checksumToBytes(0x30c7ddbc), Next: 0}},       // Last Tangerine block
-				{10, ID{Hash: checksumToBytes(0x30c7ddbc), Next: 0}},      // First Spurious block
-				{1699999, ID{Hash: checksumToBytes(0x30c7ddbc), Next: 0}}, // Last Spurious block
-				{1700000, ID{Hash: checksumToBytes(0x30c7ddbc), Next: 0}}, // First Byzantium block
-				{4229999, ID{Hash: checksumToBytes(0x30c7ddbc), Next: 0}}, // Last Byzantium block
-				{4230000, ID{Hash: checksumToBytes(0x30c7ddbc), Next: 0}}, // First Constantinople block
-				{4939393, ID{Hash: checksumToBytes(0x30c7ddbc), Next: 0}}, // Last Constantinople block
-				{4939394, ID{Hash: checksumToBytes(0x30c7ddbc), Next: 0}}, // First Petersburg block
-				{5822692, ID{Hash: checksumToBytes(0x30c7ddbc), Next: 0}}, // Today Petersburg block
+				{0, ID{Hash: checksumToBytes(0x12edcbe4), Next: 0}},       // Unsynced, last Frontier, Homestead and first Tangerine block
+				{9, ID{Hash: checksumToBytes(0x12edcbe4), Next: 0}},       // Last Tangerine block
+				{10, ID{Hash: checksumToBytes(0x12edcbe4), Next: 0}},      // First Spurious block
+				{1699999, ID{Hash: checksumToBytes(0x12edcbe4), Next: 0}}, // Last Spurious block
+				{1700000, ID{Hash: checksumToBytes(0x12edcbe4), Next: 0}}, // First Byzantium block
+				{4229999, ID{Hash: checksumToBytes(0x12edcbe4), Next: 0}}, // Last Byzantium block
+				{4230000, ID{Hash: checksumToBytes(0x12edcbe4), Next: 0}}, // First Constantinople block
+				{4939393, ID{Hash: checksumToBytes(0x12edcbe4), Next: 0}}, // Last Constantinople block
+				{4939394, ID{Hash: checksumToBytes(0x12edcbe4), Next: 0}}, // First Petersburg block
+				{5822692, ID{Hash: checksumToBytes(0x12edcbe4), Next: 0}}, // Today Petersburg block
 			},
 		},
 	}
@@ -90,16 +90,16 @@ func TestValidation(t *testing.T) {
 		err  error
 	}{
 		// Local is mainnet Petersburg, remote announces the same. No future fork is announced.
-		{7987396, ID{Hash: checksumToBytes(0xfc64ec04), Next: 0}, nil},
+		{7987396, ID{Hash: checksumToBytes(0x659dd140), Next: 0}, nil},
 
 		// Local is mainnet Petersburg, remote announces the same. Remote also announces a next fork
 		// at block 0xffffffff, but that is uncertain.
-		{7987396, ID{Hash: checksumToBytes(0xfc64ec04), Next: math.MaxUint64}, nil},
+		{7987396, ID{Hash: checksumToBytes(0x659dd140), Next: math.MaxUint64}, nil},
 
 		// Local is mainnet currently in Byzantium only (so it's aware of Petersburg), remote announces
 		// also Byzantium, but it's not yet aware of Petersburg (e.g. non updated node before the fork).
 		// In this case we don't know if Petersburg passed yet or not.
-		{7279999, ID{Hash: checksumToBytes(0xfc64ec04), Next: 0}, nil},
+		{7279999, ID{Hash: checksumToBytes(0x659dd140), Next: 0}, nil},
 
 		// Local is mainnet currently in Byzantium only (so it's aware of Petersburg), remote announces
 		// also Byzantium, and it's also aware of Petersburg (e.g. updated node before the fork). We
@@ -109,7 +109,7 @@ func TestValidation(t *testing.T) {
 		// Local is mainnet currently in Byzantium only (so it's aware of Petersburg), remote announces
 		// also Byzantium, and it's also aware of some random fork (e.g. misconfigured Petersburg). As
 		// neither forks passed at neither nodes, they may mismatch, but we still connect for now.
-		{7279999, ID{Hash: checksumToBytes(0xfc64ec04), Next: math.MaxUint64}, nil},
+		{7279999, ID{Hash: checksumToBytes(0x659dd140), Next: math.MaxUint64}, nil},
 
 		// Local is mainnet Petersburg, remote announces Byzantium + knowledge about Petersburg. Remote
 		// is simply out of sync, accept.
@@ -124,7 +124,7 @@ func TestValidation(t *testing.T) {
 
 		// Local is mainnet Spurious, remote announces Byzantium, but is not aware of Petersburg. Local
 		// out of sync. Local also knows about a future fork, but that is uncertain yet.
-		{4369999, ID{Hash: checksumToBytes(0xfc64ec04), Next: 0}, nil},
+		{4369999, ID{Hash: checksumToBytes(0x659dd140), Next: 0}, nil},
 
 		// Local is mainnet Petersburg. remote announces Byzantium but is not aware of further forks.
 		// Remote needs software update.
