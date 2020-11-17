@@ -78,7 +78,6 @@ var (
 		executablePath("evm"),
 		executablePath("gccm"),
 		executablePath("rlpdump"),
-		executablePath("wnode"),
 		executablePath("clef"),
 	}
 

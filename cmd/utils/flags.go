@@ -63,7 +63,6 @@ import (
 	"github.com/ccm-chain/ccmchain/protocol/downloader"
 	"github.com/ccm-chain/ccmchain/protocol/gasprice"
 	"github.com/ccm-chain/ccmchain/stats"
-	whisper "github.com/ccm-chain/ccmchain/whisper/whisperv6"
 	pcsclite "github.com/gballet/go-libpcsclite"
 	cli "gopkg.in/urfave/cli.v1"
 )
@@ -631,12 +630,12 @@ var (
 	WhisperMaxMessageSizeFlag = cli.IntFlag{
 		Name:  "shh.maxmessagesize",
 		Usage: "Max message size accepted",
-		Value: int(whisper.DefaultMaxMessageSize),
+		Value: 1024 * 1024,
 	}
 	WhisperMinPOWFlag = cli.Float64Flag{
 		Name:  "shh.pow",
 		Usage: "Minimum POW accepted",
-		Value: whisper.DefaultMinimumPoW,
+		Value: 0.2,
 	}
 	WhisperRestrictConnectionBetweenLightClientsFlag = cli.BoolFlag{
 		Name:  "shh.restrict-light",
@@ -1416,15 +1415,12 @@ func CheckExclusive(ctx *cli.Context, args ...interface{}) {
 }
 
 // SetShhConfig applies shh-related command line flags to the config.
-func SetShhConfig(ctx *cli.Context, stack *node.Node, cfg *whisper.Config) {
-	if ctx.GlobalIsSet(WhisperMaxMessageSizeFlag.Name) {
-		cfg.MaxMessageSize = uint32(ctx.GlobalUint(WhisperMaxMessageSizeFlag.Name))
-	}
-	if ctx.GlobalIsSet(WhisperMinPOWFlag.Name) {
-		cfg.MinimumAcceptedPOW = ctx.GlobalFloat64(WhisperMinPOWFlag.Name)
-	}
-	if ctx.GlobalIsSet(WhisperRestrictConnectionBetweenLightClientsFlag.Name) {
-		cfg.RestrictConnectionBetweenLightClients = true
+func SetShhConfig(ctx *cli.Context, stack *node.Node) {
+	if ctx.GlobalIsSet(WhisperEnabledFlag.Name) ||
+		ctx.GlobalIsSet(WhisperMaxMessageSizeFlag.Name) ||
+		ctx.GlobalIsSet(WhisperMinPOWFlag.Name) ||
+		ctx.GlobalIsSet(WhisperRestrictConnectionBetweenLightClientsFlag.Name) {
+		log.Warn("Whisper support has been deprecated and the code has been moved to github.com/ccm-chain/whisper")
 	}
 }
 
@@ -1607,13 +1603,6 @@ func RegisterEthService(stack *node.Node, cfg *protocol.Config) ethapi.Backend {
 			}
 		}
 		return backend.APIBackend
-	}
-}
-
-// RegisterShhService configures Whisper and adds it to the given node.
-func RegisterShhService(stack *node.Node, cfg *whisper.Config) {
-	if _, err := whisper.New(stack, cfg); err != nil {
-		Fatalf("Failed to register the Whisper service: %v", err)
 	}
 }
 
