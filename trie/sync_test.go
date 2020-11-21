@@ -25,6 +25,7 @@ import (
 	"github.com/ccm-chain/ccmchain/database/memorydb"
 )
 
+// makeTestTrie create a sample test trie to test node-wise reconstruction.
 func makeTestTrie() (*Database, *SecureTrie, map[string][]byte) {
 	// Create an empty trie
 	triedb := NewDatabase(memorydb.New())

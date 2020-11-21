@@ -338,9 +338,6 @@ func (s *stateObject) updateTrie(db Database) Trie {
 	if len(s.pendingStorage) > 0 {
 		s.pendingStorage = make(Storage)
 	}
-	if len(s.pendingStorage) > 0 {
-		s.pendingStorage = make(Storage)
-	}
 	return tr
 }
 

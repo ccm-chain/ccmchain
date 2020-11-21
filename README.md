@@ -133,7 +133,7 @@ above command does.  It will also create a persistent volume in your home direct
 saving your blockchain as well as map the default ports. There is also an `alpine` tag
 available for a slim version of the image.
 
-Do not forget `--rpcaddr 0.0.0.0`, if you want to access RPC from other containers
+Do not forget `--http.addr 0.0.0.0`, if you want to access RPC from other containers
 and/or hosts. By default, `gccm` binds to the local interface and RPC endpoints is not
 accessible from the outside.
 
