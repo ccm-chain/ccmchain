@@ -104,10 +104,6 @@ var (
 			Description: "Developer utility tool that prints RLP structures.",
 		},
 		{
-			BinaryName:  "wnode",
-			Description: "Ccmchain Whisper diagnostic tool",
-		},
-		{
 			BinaryName:  "clef",
 			Description: "Ccmchain account management tool.",
 		},

@@ -2,12 +2,21 @@ language: go
 go_import_path: github.com/ccm-chain/ccmchain
 sudo: false
 jobs:
+  allow_failures:
+    - stage: build
+      os: osx
+      go: 1.14.x
+      env:
+        - azure-osx
+        - azure-ios
+        - cocoapods-ios
+
   include:
-        # This builder only tests code linters on latest version of Go
+    # This builder only tests code linters on latest version of Go
     - stage: lint
       os: linux
       dist: xenial
-      go: 1.13.x
+      go: 1.15.x
       env:
         - lint
       git:
@@ -38,16 +47,33 @@ jobs:
     - stage: build
       if: type = pull_request
       os: linux
+      arch: amd64
+      dist: xenial
+      go: 1.15.x
+      env:
+        - GO111MODULE=on
+      script:
+        - go run build/ci.go install
+        - go run build/ci.go test -coverage $TEST_PACKAGES
+
+    - stage: build
+      if: type = pull_request
+      os: linux
       arch: arm64
       dist: xenial
-      go: 1.14.x
+      go: 1.15.x
+      env:
+        - GO111MODULE=on
       script:
         - go run build/ci.go install
         - go run build/ci.go test -coverage $TEST_PACKAGES
 
     - stage: build
       os: osx
-      go: 1.14.x
+      osx_image: xcode11.3
+      go: 1.15.x
+      env:
+        - GO111MODULE=on
       script:
         - echo "Increase the maximum number of open file descriptors on macOS"
         - NOFILE=20480

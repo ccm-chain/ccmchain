@@ -53,14 +53,29 @@ func ReadTxLookupEntry(db database.Reader, hash common.Hash) *uint64 {
 	return &entry.BlockIndex
 }
 
-// WriteTxLookupEntries stores a positional metadata for every transaction from
+// writeTxLookupEntry stores a positional metadata for a transaction,
+// enabling hash based transaction and receipt lookups.
+func writeTxLookupEntry(db database.KeyValueWriter, hash common.Hash, numberBytes []byte) {
+	if err := db.Put(txLookupKey(hash), numberBytes); err != nil {
+		log.Crit("Failed to store transaction lookup entry", "err", err)
+	}
+}
+
+// WriteTxLookupEntries is identical to WriteTxLookupEntry, but it works on
+// a list of hashes
+func WriteTxLookupEntries(db database.KeyValueWriter, number uint64, hashes []common.Hash) {
+	numberBytes := new(big.Int).SetUint64(number).Bytes()
+	for _, hash := range hashes {
+		writeTxLookupEntry(db, hash, numberBytes)
+	}
+}
+
+// WriteTxLookupEntriesByBlock stores a positional metadata for every transaction from
 // a block, enabling hash based transaction and receipt lookups.
-func WriteTxLookupEntries(db database.KeyValueWriter, block *types.Block) {
-	number := block.Number().Bytes()
+func WriteTxLookupEntriesByBlock(db database.KeyValueWriter, block *types.Block) {
+	numberBytes := block.Number().Bytes()
 	for _, tx := range block.Transactions() {
-		if err := db.Put(txLookupKey(tx.Hash()), number); err != nil {
-			log.Crit("Failed to store transaction lookup entry", "err", err)
-		}
+		writeTxLookupEntry(db, tx.Hash(), numberBytes)
 	}
 }
 
@@ -83,11 +98,9 @@ func DeleteTxLookupEntry(db database.KeyValueWriter, hash common.Hash) {
 }
 
 // DeleteTxLookupEntries removes all transaction lookups for a given block.
-func DeleteTxLookupEntriesByHash(db database.KeyValueWriter, hashes []common.Hash) {
+func DeleteTxLookupEntries(db database.KeyValueWriter, hashes []common.Hash) {
 	for _, hash := range hashes {
-		if err := db.Delete(txLookupKey(hash)); err != nil {
-			log.Crit("Failed to delete transaction lookup entry", "err", err)
-		}
+		DeleteTxLookupEntry(db, hash)
 	}
 }
 
