@@ -17,14 +17,14 @@
 package graphql
 
 import (
-	"github.com/ccm-chain/ccmchain/internal/ethapi"
+	"github.com/ccm-chain/ccmchain/internal/api"
 	"github.com/ccm-chain/ccmchain/node"
 	"github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 )
 
 // New constructs a new GraphQL service instance.
-func New(stack *node.Node, backend ethapi.Backend, cors, vhosts []string) error {
+func New(stack *node.Node, backend api.Backend, cors, vhosts []string) error {
 	if backend == nil {
 		panic("missing backend")
 	}
@@ -34,7 +34,7 @@ func New(stack *node.Node, backend ethapi.Backend, cors, vhosts []string) error 
 
 // newHandler returns a new `http.Handler` that will answer GraphQL queries.
 // It additionally exports an interactive query browser on the / endpoint.
-func newHandler(stack *node.Node, backend ethapi.Backend, cors, vhosts []string) error {
+func newHandler(stack *node.Node, backend api.Backend, cors, vhosts []string) error {
 	q := Resolver{backend}
 
 	s, err := graphql.ParseSchema(schema, &q)

@@ -22,7 +22,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ccm-chain/ccmchain/internal/ethapi"
+	ethapi "github.com/ccm-chain/ccmchain/internal/api"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/signer/core"
 	"github.com/ccm-chain/ccmchain/signer/rules/deps"

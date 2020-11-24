@@ -38,7 +38,7 @@ import (
 	"github.com/ccm-chain/ccmchain/core/vm"
 	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/event"
-	"github.com/ccm-chain/ccmchain/internal/ethapi"
+	"github.com/ccm-chain/ccmchain/internal/api"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/miner"
 	"github.com/ccm-chain/ccmchain/node"
@@ -81,7 +81,7 @@ type Ethereum struct {
 	coinbase common.Address
 
 	networkID     uint64
-	netRPCService *ethapi.PublicNetAPI
+	netRPCService *api.PublicNetAPI
 
 	p2pServer *p2p.Server
 
@@ -213,7 +213,7 @@ func New(stack *node.Node, config *Config) (*Ethereum, error) {
 	}
 
 	// Start the RPC service
-	eth.netRPCService = ethapi.NewPublicNetAPI(eth.p2pServer, eth.NetVersion())
+	eth.netRPCService = api.NewPublicNetAPI(eth.p2pServer, eth.NetVersion())
 
 	// Register the backend on the node
 	stack.RegisterAPIs(eth.APIs())
@@ -275,7 +275,7 @@ func CreateConsensusEngine(stack *node.Node, chainConfig *params.ChainConfig, co
 // APIs return the collection of RPC services the ccmchain package offers.
 // NOTE, some of these services probably need to be moved to somewhere else.
 func (s *Ethereum) APIs() []rpc.API {
-	apis := ethapi.GetAPIs(s.APIBackend)
+	apis := api.GetAPIs(s.APIBackend)
 
 	// Append any APIs exposed explicitly by the consensus engine
 	apis = append(apis, s.engine.APIs(s.BlockChain())...)
