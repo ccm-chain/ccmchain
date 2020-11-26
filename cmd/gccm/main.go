@@ -211,7 +211,7 @@ var (
 
 func init() {
 	// Initialize the CLI app and start Geth
-	app.Action = geth
+	app.Action = gccm
 	app.HideVersion = true // we have a command to print the version
 	app.Copyright = "Copyright 2017-2020 The ccmchain Authors"
 	app.Commands = []cli.Command{
@@ -278,9 +278,7 @@ func prepare(ctx *cli.Context) {
 	// If we're running a known preset, log it for convenience.
 	switch {
 	case ctx.GlobalIsSet(utils.TestnetFlag.Name):
-		log.Info("Starting Gccm on Ropsten testnet...")
-		log.Warn("The --testnet flag is ambiguous! Please specify one of --goerli, --rinkeby, or --ropsten.")
-		log.Warn("The generic --testnet flag is deprecated and will be removed in the future!")
+		log.Info("Starting Gccm on testnet...")
 
 	case ctx.GlobalIsSet(utils.DeveloperFlag.Name):
 		log.Info("Starting Gccm in ephemeral dev mode...")
@@ -332,7 +330,7 @@ func prepare(ctx *cli.Context) {
 // geth is the main entry point into the system if no special subcommand is ran.
 // It creates a default node based on the command line arguments and runs it in
 // blocking mode, waiting for it to be shut down.
-func geth(ctx *cli.Context) error {
+func gccm(ctx *cli.Context) error {
 	if args := ctx.Args(); len(args) > 0 {
 		return fmt.Errorf("invalid command: %q", args[0])
 	}
