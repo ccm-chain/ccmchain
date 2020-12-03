@@ -152,7 +152,7 @@ func makeConfigNode(ctx *cli.Context) (*node.Node, gethConfig) {
 func checkWhisper(ctx *cli.Context) {
 	for _, flag := range whisperFlags {
 		if ctx.GlobalIsSet(flag.GetName()) {
-			log.Warn("deprecated whisper flag detected. Whisper has been moved to github.com/ethereum/whisper")
+			log.Warn("deprecated whisper flag detected. Whisper has been moved to github.com/ccm-chain/whisper")
 		}
 	}
 }
