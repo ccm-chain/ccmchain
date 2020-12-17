@@ -113,8 +113,8 @@ func (miner *Miner) update() {
 				}
 			}
 		case addr := <-miner.startCh:
+			miner.SetCoinbase(addr)
 			if canStart {
-				miner.SetCoinbase(addr)
 				miner.worker.start()
 			}
 			shouldStart = true
