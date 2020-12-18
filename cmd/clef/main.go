@@ -42,7 +42,7 @@ import (
 	"github.com/ccm-chain/ccmchain/common/hexutil"
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/crypto"
-	"github.com/ccm-chain/ccmchain/internal/ethapi"
+	ethapi "github.com/ccm-chain/ccmchain/internal/api"
 	"github.com/ccm-chain/ccmchain/internal/flags"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/node"
@@ -1023,7 +1023,7 @@ func GenDoc(ctx *cli.Context) {
 		b    = common.HexToAddress("0x1111111122222222222233333333334444444444")
 		meta = core.Metadata{
 			Scheme:    "http",
-			Local:     "localhost:8545",
+			Local:     "localhost:8085",
 			Origin:    "www.malicious.ru",
 			Remote:    "localhost:9999",
 			UserAgent: "Firefox 3.2",

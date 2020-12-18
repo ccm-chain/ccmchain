@@ -19,7 +19,7 @@ package core
 import (
 	"context"
 
-	"github.com/ccm-chain/ccmchain/internal/ethapi"
+	ethapi "github.com/ccm-chain/ccmchain/internal/api"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/rpc"
 )

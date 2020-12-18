@@ -32,7 +32,7 @@ import (
 	"github.com/ccm-chain/ccmchain/common"
 	"github.com/ccm-chain/ccmchain/common/hexutil"
 	"github.com/ccm-chain/ccmchain/core/types"
-	"github.com/ccm-chain/ccmchain/internal/ethapi"
+	ethapi "github.com/ccm-chain/ccmchain/internal/api"
 	"github.com/ccm-chain/ccmchain/rlp"
 	"github.com/ccm-chain/ccmchain/signer/core"
 	"github.com/ccm-chain/ccmchain/signer/fourbyte"

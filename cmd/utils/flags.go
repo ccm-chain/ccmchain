@@ -44,7 +44,7 @@ import (
 	"github.com/ccm-chain/ccmchain/crypto"
 	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/graphql"
-	"github.com/ccm-chain/ccmchain/internal/ethapi"
+	"github.com/ccm-chain/ccmchain/internal/api"
 	"github.com/ccm-chain/ccmchain/internal/flags"
 	"github.com/ccm-chain/ccmchain/les"
 	"github.com/ccm-chain/ccmchain/log"
@@ -564,7 +564,7 @@ var (
 	ListenPortFlag = cli.IntFlag{
 		Name:  "port",
 		Usage: "Network listening port",
-		Value: 30303,
+		Value: 10101,
 	}
 	BootnodesFlag = cli.StringFlag{
 		Name:  "bootnodes",
@@ -939,11 +939,6 @@ func setWS(ctx *cli.Context, cfg *node.Config) {
 	}
 	if ctx.GlobalIsSet(WSAllowedOriginsFlag.Name) {
 		cfg.WSOrigins = SplitAndTrim(ctx.GlobalString(WSAllowedOriginsFlag.Name))
-	}
-
-	if ctx.GlobalIsSet(LegacyWSApiFlag.Name) {
-		cfg.WSModules = SplitAndTrim(ctx.GlobalString(LegacyWSApiFlag.Name))
-		log.Warn("The flag --wsapi is deprecated and will be removed in the future, please use --ws.api")
 	}
 
 	if ctx.GlobalIsSet(LegacyWSApiFlag.Name) {
@@ -1592,7 +1587,7 @@ func SetEthConfig(ctx *cli.Context, stack *node.Node, cfg *protocol.Config) {
 }
 
 // RegisterEthService adds an Ethereum client to the stack.
-func RegisterEthService(stack *node.Node, cfg *protocol.Config) ethapi.Backend {
+func RegisterEthService(stack *node.Node, cfg *protocol.Config) api.Backend {
 	if cfg.SyncMode == downloader.LightSync {
 		backend, err := les.New(stack, cfg)
 		if err != nil {
@@ -1616,14 +1611,14 @@ func RegisterEthService(stack *node.Node, cfg *protocol.Config) ethapi.Backend {
 
 // RegisterEthStatsService configures the ccmchain Stats daemon and adds it to
 // the given node.
-func RegisterEthStatsService(stack *node.Node, backend ethapi.Backend, url string) {
+func RegisterEthStatsService(stack *node.Node, backend api.Backend, url string) {
 	if err := stats.New(stack, backend, backend.Engine(), url); err != nil {
 		Fatalf("Failed to register the Ccmchain Stats service: %v", err)
 	}
 }
 
 // RegisterGraphQLService is a utility function to construct a new service and register it against a node.
-func RegisterGraphQLService(stack *node.Node, backend ethapi.Backend, cfg node.Config) {
+func RegisterGraphQLService(stack *node.Node, backend api.Backend, cfg node.Config) {
 	if err := graphql.New(stack, backend, cfg.GraphQLCors, cfg.GraphQLVirtualHosts); err != nil {
 		Fatalf("Failed to register the GraphQL service: %v", err)
 	}

@@ -38,7 +38,7 @@ import (
 	"github.com/ccm-chain/ccmchain/core/vm"
 	"github.com/ccm-chain/ccmchain/database"
 	"github.com/ccm-chain/ccmchain/event"
-	"github.com/ccm-chain/ccmchain/internal/ethapi"
+	"github.com/ccm-chain/ccmchain/internal/api"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/miner"
 	"github.com/ccm-chain/ccmchain/node"
@@ -81,7 +81,7 @@ type Ethereum struct {
 	coinbase common.Address
 
 	networkID     uint64
-	netRPCService *ethapi.PublicNetAPI
+	netRPCService *api.PublicNetAPI
 
 	p2pServer *p2p.Server
 
@@ -93,7 +93,7 @@ type Ethereum struct {
 func New(stack *node.Node, config *Config) (*Ethereum, error) {
 	// Ensure configuration values are compatible and sane
 	if config.SyncMode == downloader.LightSync {
-		return nil, errors.New("can't run eth.Ethereum in light sync mode, use les.LightEthereum")
+		return nil, errors.New("can't run ccm.Ccmchain in light sync mode, use les.LightEthereum")
 	}
 	if !config.SyncMode.IsValid() {
 		return nil, fmt.Errorf("invalid sync mode %d", config.SyncMode)
@@ -114,7 +114,7 @@ func New(stack *node.Node, config *Config) (*Ethereum, error) {
 	log.Info("Allocated trie memory caches", "clean", common.StorageSize(config.TrieCleanCache)*1024*1024, "dirty", common.StorageSize(config.TrieDirtyCache)*1024*1024)
 
 	// Assemble the Ethereum object
-	chainDb, err := stack.OpenDatabaseWithFreezer("chaindata", config.DatabaseCache, config.DatabaseHandles, config.DatabaseFreezer, "eth/db/chaindata/")
+	chainDb, err := stack.OpenDatabaseWithFreezer("chaindata", config.DatabaseCache, config.DatabaseHandles, config.DatabaseFreezer, "ccm/db/chaindata/")
 	if err != nil {
 		return nil, err
 	}
@@ -213,7 +213,7 @@ func New(stack *node.Node, config *Config) (*Ethereum, error) {
 	}
 
 	// Start the RPC service
-	eth.netRPCService = ethapi.NewPublicNetAPI(eth.p2pServer, eth.NetVersion())
+	eth.netRPCService = api.NewPublicNetAPI(eth.p2pServer, eth.NetVersion())
 
 	// Register the backend on the node
 	stack.RegisterAPIs(eth.APIs())
@@ -275,7 +275,7 @@ func CreateConsensusEngine(stack *node.Node, chainConfig *params.ChainConfig, co
 // APIs return the collection of RPC services the ccmchain package offers.
 // NOTE, some of these services probably need to be moved to somewhere else.
 func (s *Ethereum) APIs() []rpc.API {
-	apis := ethapi.GetAPIs(s.APIBackend)
+	apis := api.GetAPIs(s.APIBackend)
 
 	// Append any APIs exposed explicitly by the consensus engine
 	apis = append(apis, s.engine.APIs(s.BlockChain())...)

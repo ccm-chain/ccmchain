@@ -124,7 +124,7 @@ Docker:
 
 ```shell
 docker run -d --name ccmchain-node -v /Users/alice/ccmchain:/root \
-           -p 8545:8545 -p 30303:30303 \
+           -p 8085:8085 -p 10101:10101 \
            ccmchain/client-go
 ```
 
@@ -155,12 +155,12 @@ HTTP based JSON-RPC API options:
 
   * `--http` Enable the HTTP-RPC server
   * `--http.addr` HTTP-RPC server listening interface (default: `localhost`)
-  * `--http.port` HTTP-RPC server listening port (default: `8545`)
+  * `--http.port` HTTP-RPC server listening port (default: `8085`)
   * `--http.api` API's offered over the HTTP-RPC interface (default: `ccm,net,web3`)
   * `--http.corsdomain` Comma separated list of domains from which to accept cross origin requests (browser enforced)
   * `--ws` Enable the WS-RPC server
   * `--ws.addr` WS-RPC server listening interface (default: `localhost`)
-  * `--ws.port` WS-RPC server listening port (default: `8546`)
+  * `--ws.port` WS-RPC server listening port (default: `8086`)
   * `--ws.api` API's offered over the WS-RPC interface (default: `ccm,net,web3`)
   * `--ws.origins` Origins from which to accept websockets requests
   * `--ipcdisable` Disable the IPC-RPC server

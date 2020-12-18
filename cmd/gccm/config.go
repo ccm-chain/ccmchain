@@ -25,7 +25,7 @@ import (
 	"unicode"
 
 	"github.com/ccm-chain/ccmchain/cmd/utils"
-	"github.com/ccm-chain/ccmchain/internal/ethapi"
+	"github.com/ccm-chain/ccmchain/internal/api"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/node"
 	"github.com/ccm-chain/ccmchain/params"
@@ -152,13 +152,13 @@ func makeConfigNode(ctx *cli.Context) (*node.Node, gethConfig) {
 func checkWhisper(ctx *cli.Context) {
 	for _, flag := range whisperFlags {
 		if ctx.GlobalIsSet(flag.GetName()) {
-			log.Warn("deprecated whisper flag detected. Whisper has been moved to github.com/ethereum/whisper")
+			log.Warn("deprecated whisper flag detected. Whisper has been moved to github.com/ccm-chain/whisper")
 		}
 	}
 }
 
 // makeFullNode loads geth configuration and creates the Ethereum backend.
-func makeFullNode(ctx *cli.Context) (*node.Node, ethapi.Backend) {
+func makeFullNode(ctx *cli.Context) (*node.Node, api.Backend) {
 	stack, cfg := makeConfigNode(ctx)
 
 	backend := utils.RegisterEthService(stack, &cfg.Eth)

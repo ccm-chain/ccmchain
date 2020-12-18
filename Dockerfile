@@ -12,5 +12,5 @@ FROM alpine:latest
 RUN apk add --no-cache ca-certificates
 COPY --from=builder /ccmchain/build/bin/gccm /usr/local/bin/
 
-EXPOSE 8545 8546 30303 30303/udp
+EXPOSE 8085 8086 10101 10101/udp
 ENTRYPOINT ["gccm"]

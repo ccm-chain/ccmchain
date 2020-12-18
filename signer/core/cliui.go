@@ -26,7 +26,7 @@ import (
 
 	"github.com/ccm-chain/ccmchain/common/hexutil"
 	"github.com/ccm-chain/ccmchain/console/prompt"
-	"github.com/ccm-chain/ccmchain/internal/ethapi"
+	ethapi "github.com/ccm-chain/ccmchain/internal/api"
 	"github.com/ccm-chain/ccmchain/log"
 )
 

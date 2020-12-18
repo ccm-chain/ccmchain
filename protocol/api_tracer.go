@@ -35,7 +35,7 @@ import (
 	"github.com/ccm-chain/ccmchain/core/state"
 	"github.com/ccm-chain/ccmchain/core/types"
 	"github.com/ccm-chain/ccmchain/core/vm"
-	"github.com/ccm-chain/ccmchain/internal/ethapi"
+	ethapi "github.com/ccm-chain/ccmchain/internal/api"
 	"github.com/ccm-chain/ccmchain/log"
 	"github.com/ccm-chain/ccmchain/protocol/tracers"
 	"github.com/ccm-chain/ccmchain/rlp"
