@@ -173,7 +173,7 @@ func newTestClientHandler(backend *backends.SimulatedBackend, odr *LesOdr, index
 		evmux  = new(event.TypeMux)
 		engine = ethash.NewFaker()
 		gspec  = core.Genesis{
-			Config:   params.AllEthashProtocolChanges,
+			Config:   params.AllProtocolChanges,
 			Alloc:    core.GenesisAlloc{bankAddr: {Balance: bankFunds}},
 			GasLimit: 100000000,
 		}
@@ -203,7 +203,7 @@ func newTestClientHandler(backend *backends.SimulatedBackend, odr *LesOdr, index
 		lesCommons: lesCommons{
 			genesis:     genesis.Hash(),
 			config:      &protocol.Config{LightPeers: 100, NetworkId: NetworkId},
-			chainConfig: params.AllEthashProtocolChanges,
+			chainConfig: params.AllProtocolChanges,
 			iConfig:     light.TestClientIndexerConfig,
 			chainDb:     db,
 			oracle:      oracle,
@@ -230,7 +230,7 @@ func newTestClientHandler(backend *backends.SimulatedBackend, odr *LesOdr, index
 func newTestServerHandler(blocks int, indexers []*core.ChainIndexer, db database.Database, peers *clientPeerSet, clock mclock.Clock) (*serverHandler, *backends.SimulatedBackend) {
 	var (
 		gspec = core.Genesis{
-			Config:   params.AllEthashProtocolChanges,
+			Config:   params.AllProtocolChanges,
 			Alloc:    core.GenesisAlloc{bankAddr: {Balance: bankFunds}},
 			GasLimit: 100000000,
 		}
@@ -267,7 +267,7 @@ func newTestServerHandler(blocks int, indexers []*core.ChainIndexer, db database
 		lesCommons: lesCommons{
 			genesis:     genesis.Hash(),
 			config:      &protocol.Config{LightPeers: 100, NetworkId: NetworkId},
-			chainConfig: params.AllEthashProtocolChanges,
+			chainConfig: params.AllProtocolChanges,
 			iConfig:     light.TestServerIndexerConfig,
 			chainDb:     db,
 			chainReader: simulation.Blockchain(),
