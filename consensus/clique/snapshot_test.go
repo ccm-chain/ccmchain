@@ -413,6 +413,8 @@ func TestClique(t *testing.T) {
 		engine.fakeDiff = true
 
 		blocks, _ := core.GenerateChain(&config, genesis.ToBlock(db), engine, db, len(tt.votes), func(j int, gen *core.BlockGen) {
+			// authorize signer
+			engine.Authorize(accounts.address(tt.votes[j].signer), nil)
 			// Cast the vote contained in this block
 			gen.SetCoinbase(accounts.address(tt.votes[j].voted))
 			if tt.votes[j].auth {
