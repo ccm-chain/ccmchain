@@ -41,7 +41,6 @@ import (
 	"github.com/ccm-chain/ccmchain/rpc"
 	"github.com/ccm-chain/ccmchain/trie"
 	lru "github.com/hashicorp/golang-lru"
-	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/sha3"
 )
 
@@ -559,7 +558,7 @@ func (c *Clique) Finalize(chain consensus.ChainHeaderReader, header *types.Heade
 	// Resolve the authorization signer
 	signer, err := ecrecover(header, c.signatures)
 	if err != nil {
-		logrus.Errorf("Finalize: %s", err.Error())
+		log.Error("Recover signer failed, ", err.Error())
 		return
 	}
 
