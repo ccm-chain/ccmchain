@@ -152,8 +152,6 @@ var AppHelpFlagGroups = []flags.FlagGroup{
 		Name: "NETWORKING",
 		Flags: []cli.Flag{
 			utils.BootnodesFlag,
-			utils.LegacyBootnodesV4Flag,
-			utils.LegacyBootnodesV5Flag,
 			utils.DNSDiscoveryFlag,
 			utils.ListenPortFlag,
 			utils.MaxPeersFlag,
@@ -209,29 +207,6 @@ var AppHelpFlagGroups = []flags.FlagGroup{
 		Flags: metricsFlags,
 	},
 	{
-		Name:  "WHISPER (deprecated)",
-		Flags: whisperFlags,
-	},
-	{
-		Name: "ALIASED (deprecated)",
-		Flags: append([]cli.Flag{
-			utils.LegacyRPCEnabledFlag,
-			utils.LegacyRPCListenAddrFlag,
-			utils.LegacyRPCPortFlag,
-			utils.LegacyRPCCORSDomainFlag,
-			utils.LegacyRPCVirtualHostsFlag,
-			utils.LegacyRPCApiFlag,
-			utils.LegacyWSListenAddrFlag,
-			utils.LegacyWSPortFlag,
-			utils.LegacyWSAllowedOriginsFlag,
-			utils.LegacyWSApiFlag,
-			utils.LegacyGpoBlocksFlag,
-			utils.LegacyGpoPercentileFlag,
-			utils.LegacyGraphQLListenAddrFlag,
-			utils.LegacyGraphQLPortFlag,
-		}, debug.DeprecatedFlags...),
-	},
-	{
 		Name: "MISC",
 		Flags: []cli.Flag{
 			utils.SnapshotFlag,
@@ -255,17 +230,11 @@ func init() {
 					categorized[flag.String()] = struct{}{}
 				}
 			}
-			deprecated := make(map[string]struct{})
-			for _, flag := range utils.DeprecatedFlags {
-				deprecated[flag.String()] = struct{}{}
-			}
 			// Only add uncategorized flags if they are not deprecated
 			var uncategorized []cli.Flag
 			for _, flag := range data.(*cli.App).Flags {
 				if _, ok := categorized[flag.String()]; !ok {
-					if _, ok := deprecated[flag.String()]; !ok {
-						uncategorized = append(uncategorized, flag)
-					}
+					uncategorized = append(uncategorized, flag)
 				}
 			}
 			if len(uncategorized) > 0 {
