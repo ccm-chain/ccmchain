@@ -75,7 +75,7 @@ func runGeth(t *testing.T, args ...string) *testgeth {
 			if i < len(args)-1 {
 				tt.Datadir = args[i+1]
 			}
-		case arg == "-coinbase" || arg == "--coinbase":
+		case arg == "-miner.coinbase" || arg == "--miner.coinbase":
 			if i < len(args)-1 {
 				tt.Coinbase = args[i+1]
 			}
