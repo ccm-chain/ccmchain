@@ -67,7 +67,10 @@ var (
 	diffInTurn = big.NewInt(2) // Block difficulty for in-turn signatures
 	diffNoTurn = big.NewInt(1) // Block difficulty for out-of-turn signatures
 
-	HomesteadBlockReward = big.NewInt(2e+18) // Block reward in wei for successfully mining a block upward from Homestead
+	homesteadBlockReward = big.NewInt(5e+16) // Block reward in wei for successfully mining a block upward from Homestead
+
+	rewardReduceBasePoint = big.NewInt(3166666) // Block number that initial reward halved
+	rewardReduceInterval  = big.NewInt(3000000)
 )
 
 // Various error messages to mark blocks invalid. These should be private to
@@ -563,7 +566,7 @@ func (c *Clique) Finalize(chain consensus.ChainHeaderReader, header *types.Heade
 	}
 
 	// Accumulate any block rewards and commit the final state root
-	accumulateRewards(chain.Config(), state, signer)
+	accumulateRewards(chain.Config(), state, header, signer)
 
 	header.Root = state.IntermediateRoot(chain.Config().IsEIP158(header.Number))
 	header.UncleHash = types.CalcUncleHash(nil)
@@ -573,7 +576,7 @@ func (c *Clique) Finalize(chain consensus.ChainHeaderReader, header *types.Heade
 // nor block rewards given, and returns the final block.
 func (c *Clique) FinalizeAndAssemble(chain consensus.ChainHeaderReader, header *types.Header, state *state.StateDB, txs []*types.Transaction, uncles []*types.Header, receipts []*types.Receipt) (*types.Block, error) {
 	// Accumulate any block rewards and commit the final state root
-	accumulateRewards(chain.Config(), state, c.signer)
+	accumulateRewards(chain.Config(), state, header, c.signer)
 
 	header.Root = state.IntermediateRoot(chain.Config().IsEIP158(header.Number))
 	header.UncleHash = types.CalcUncleHash(nil)
@@ -752,11 +755,20 @@ func encodeSigHeader(w io.Writer, header *types.Header) {
 
 // AccumulateRewards credits the coinbase of the given block with the mining
 // reward.
-func accumulateRewards(config *params.ChainConfig, state *state.StateDB, signer common.Address) {
+func accumulateRewards(config *params.ChainConfig, state *state.StateDB, header *types.Header, signer common.Address) {
 	// Select the correct block reward based on chain progression
-	blockReward := HomesteadBlockReward
+	blockReward := new(big.Int).Set(homesteadBlockReward)
 
 	// Accumulate the rewards for the miner
+	// block reward halving
+	if header.Number.Cmp(rewardReduceBasePoint) >= 0 {
+		n := new(big.Int).Sub(header.Number, rewardReduceBasePoint)
+		m := big.NewInt(0).Div(n, rewardReduceInterval)
+		r := m.Uint64() + 1
+
+		blockReward.Rsh(blockReward, uint(r))
+	}
+
 	reward := new(big.Int).Set(blockReward)
 	state.AddBalance(signer, reward)
 }
