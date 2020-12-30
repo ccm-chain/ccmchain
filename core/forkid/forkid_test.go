@@ -43,15 +43,15 @@ func TestCreation(t *testing.T) {
 			params.MainnetChainConfig,
 			params.MainnetGenesisHash,
 			[]testcase{
-				{0, ID{Hash: checksumToBytes(0x92e789d0), Next: 0}},       // Unsynced
-				{1149999, ID{Hash: checksumToBytes(0x92e789d0), Next: 0}}, // Last Frontier block
-				{1150000, ID{Hash: checksumToBytes(0x92e789d0), Next: 0}}, // First Homestead block
-				{1919999, ID{Hash: checksumToBytes(0x92e789d0), Next: 0}}, // Last Homestead block
-				{4370000, ID{Hash: checksumToBytes(0x92e789d0), Next: 0}}, // First Byzantium block
-				{7279999, ID{Hash: checksumToBytes(0x92e789d0), Next: 0}}, // Last Byzantium block
-				{7280000, ID{Hash: checksumToBytes(0x92e789d0), Next: 0}}, // First and last Constantinople, first Petersburg block
-				{7987396, ID{Hash: checksumToBytes(0x92e789d0), Next: 0}}, // Today Petersburg block
-				{1769535, ID{Hash: checksumToBytes(0x92e789d0), Next: 0}}, // Today block
+				{0, ID{Hash: checksumToBytes(0x413ae5df), Next: 0}},       // Unsynced
+				{1149999, ID{Hash: checksumToBytes(0x413ae5df), Next: 0}}, // Last Frontier block
+				{1150000, ID{Hash: checksumToBytes(0x413ae5df), Next: 0}}, // First Homestead block
+				{1919999, ID{Hash: checksumToBytes(0x413ae5df), Next: 0}}, // Last Homestead block
+				{4370000, ID{Hash: checksumToBytes(0x413ae5df), Next: 0}}, // First Byzantium block
+				{7279999, ID{Hash: checksumToBytes(0x413ae5df), Next: 0}}, // Last Byzantium block
+				{7280000, ID{Hash: checksumToBytes(0x413ae5df), Next: 0}}, // First and last Constantinople, first Petersburg block
+				{7987396, ID{Hash: checksumToBytes(0x413ae5df), Next: 0}}, // Today Petersburg block
+				{1769535, ID{Hash: checksumToBytes(0x413ae5df), Next: 0}}, // Today block
 			},
 		},
 		// Ropsten test cases
