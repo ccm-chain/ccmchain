@@ -570,6 +570,11 @@ web3._extend({
 			params: 3,
 			inputFormatter: [web3._extend.formatters.inputAddressFormatter, null, web3._extend.formatters.inputBlockNumberFormatter]
 		}),
+		new web3._extend.Method({
+			name: 'getSigner',
+			call: 'ccm_getSigner',
+			params: 1
+		}),
 	],
 	properties: [
 		new web3._extend.Property({

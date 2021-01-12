@@ -27,7 +27,7 @@ import (
 
 // Genesis hashes to enforce below configs on.
 var (
-	MainnetGenesisHash = common.HexToHash("0x1672a3f8e0b381e42e0f9e7aa81298d29d6e8fa64699d3ef2588a3aad34b0d4a")
+	MainnetGenesisHash = common.HexToHash("0x46adcec22f9fa9b66d54d8d5961fc0f31896ec3481ef35315cce738bc1fbe8c6")
 	TestnetGenesisHash = common.HexToHash("0xc9307a9f52bad0ff7339ed509ac20cfd84b7aef924e246da8802fd2ac378ea4c")
 )
 
@@ -48,13 +48,19 @@ var CheckpointOracles = map[common.Hash]*CheckpointOracleConfig{
 var (
 	// MainnetChainConfig is the chain parameters to run a node on the main network.
 	MainnetChainConfig = &ChainConfig{
-		ChainID:        big.NewInt(10),
-		HomesteadBlock: big.NewInt(0),
-		EIP150Block:    big.NewInt(0),
-		EIP150Hash:     common.Hash{},
-		EIP155Block:    big.NewInt(0),
-		EIP158Block:    big.NewInt(0),
-		Ethash:         new(EthashConfig),
+		ChainID:             big.NewInt(1),
+		HomesteadBlock:      big.NewInt(0),
+		EIP150Block:         big.NewInt(0),
+		EIP150Hash:          common.Hash{},
+		EIP155Block:         big.NewInt(0),
+		EIP158Block:         big.NewInt(0),
+		ByzantiumBlock:      big.NewInt(0),
+		ConstantinopleBlock: big.NewInt(0),
+		PetersburgBlock:     big.NewInt(0),
+		Clique: &CliqueConfig{
+			Period: 10,
+			Epoch:  30000,
+		},
 	}
 
 	// MainnetTrustedCheckpoint contains the light client trusted checkpoint for the main network.
@@ -112,6 +118,13 @@ var (
 		},
 		Threshold: 2,
 	}
+
+	// AllProtocolChanges contains every protocol change (EIPs) introduced
+	// and accepted by the Ethereum core developers into the Clique consensus.
+	//
+	// This configuration is intentionally not using keyed fields to force anyone
+	// adding flags to the config to also have to set these fields.
+	AllProtocolChanges = &ChainConfig{big.NewInt(1337), big.NewInt(0), big.NewInt(0), common.Hash{}, big.NewInt(0), big.NewInt(0), big.NewInt(0), big.NewInt(0), big.NewInt(0), nil, nil, &CliqueConfig{Period: 0, Epoch: 30000}}
 
 	// AllEthashProtocolChanges contains every protocol change (EIPs) introduced
 	// and accepted by the Ethereum core developers into the Ethash consensus.

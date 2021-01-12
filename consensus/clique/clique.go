@@ -66,6 +66,11 @@ var (
 
 	diffInTurn = big.NewInt(2) // Block difficulty for in-turn signatures
 	diffNoTurn = big.NewInt(1) // Block difficulty for out-of-turn signatures
+
+	homesteadBlockReward = big.NewInt(5e+16) // Block reward in wei for successfully mining a block upward from Homestead
+
+	rewardReduceBasePoint = big.NewInt(3166666) // Block number that initial reward halved
+	rewardReduceInterval  = big.NewInt(3000000)
 )
 
 // Various error messages to mark blocks invalid. These should be private to
@@ -553,7 +558,16 @@ func (c *Clique) Prepare(chain consensus.ChainHeaderReader, header *types.Header
 // Finalize implements consensus.Engine, ensuring no uncles are set, nor block
 // rewards given.
 func (c *Clique) Finalize(chain consensus.ChainHeaderReader, header *types.Header, state *state.StateDB, txs []*types.Transaction, uncles []*types.Header) {
-	// No block rewards in PoA, so the state remains as is and uncles are dropped
+	// Resolve the authorization signer
+	signer, err := ecrecover(header, c.signatures)
+	if err != nil {
+		log.Error("Recover signer failed, ", err.Error())
+		return
+	}
+
+	// Accumulate any block rewards and commit the final state root
+	accumulateRewards(chain.Config(), state, header, signer)
+
 	header.Root = state.IntermediateRoot(chain.Config().IsEIP158(header.Number))
 	header.UncleHash = types.CalcUncleHash(nil)
 }
@@ -561,7 +575,9 @@ func (c *Clique) Finalize(chain consensus.ChainHeaderReader, header *types.Heade
 // FinalizeAndAssemble implements consensus.Engine, ensuring no uncles are set,
 // nor block rewards given, and returns the final block.
 func (c *Clique) FinalizeAndAssemble(chain consensus.ChainHeaderReader, header *types.Header, state *state.StateDB, txs []*types.Transaction, uncles []*types.Header, receipts []*types.Receipt) (*types.Block, error) {
-	// No block rewards in PoA, so the state remains as is and uncles are dropped
+	// Accumulate any block rewards and commit the final state root
+	accumulateRewards(chain.Config(), state, header, c.signer)
+
 	header.Root = state.IntermediateRoot(chain.Config().IsEIP158(header.Number))
 	header.UncleHash = types.CalcUncleHash(nil)
 
@@ -735,4 +751,24 @@ func encodeSigHeader(w io.Writer, header *types.Header) {
 	if err != nil {
 		panic("can't encode: " + err.Error())
 	}
+}
+
+// AccumulateRewards credits the coinbase of the given block with the mining
+// reward.
+func accumulateRewards(config *params.ChainConfig, state *state.StateDB, header *types.Header, signer common.Address) {
+	// Select the correct block reward based on chain progression
+	blockReward := new(big.Int).Set(homesteadBlockReward)
+
+	// Accumulate the rewards for the miner
+	// block reward halving
+	if header.Number.Cmp(rewardReduceBasePoint) >= 0 {
+		n := new(big.Int).Sub(header.Number, rewardReduceBasePoint)
+		m := big.NewInt(0).Div(n, rewardReduceInterval)
+		r := m.Uint64() + 1
+
+		blockReward.Rsh(blockReward, uint(r))
+	}
+
+	reward := new(big.Int).Set(blockReward)
+	state.AddBalance(signer, reward)
 }

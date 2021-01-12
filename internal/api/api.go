@@ -649,6 +649,19 @@ func (s *PublicBlockChainAPI) GetHeaderByHash(ctx context.Context, hash common.H
 	return nil
 }
 
+// Signer returns the coinbase of header by hash.
+func (s *PublicBlockChainAPI) GetSigner(ctx context.Context, hash common.Hash) common.Address {
+	header, err := s.b.HeaderByHash(ctx, hash)
+	if err != nil || header == nil {
+		return common.Address{}
+	}
+	cb, err := s.b.Engine().Author(header)
+	if err != nil {
+		return common.Address{}
+	}
+	return cb
+}
+
 // GetBlockByNumber returns the requested canonical block.
 // * When blockNr is -1 the chain head is returned.
 // * When blockNr is -2 the pending chain head is returned.

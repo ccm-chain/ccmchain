@@ -121,12 +121,12 @@ func TestNewSimulatedBackend(t *testing.T) {
 	sim := simTestBackend(testAddr)
 	defer sim.Close()
 
-	if sim.config != params.AllEthashProtocolChanges {
-		t.Errorf("expected sim config to equal params.AllEthashProtocolChanges, got %v", sim.config)
+	if sim.config != params.AllProtocolChanges {
+		t.Errorf("expected sim config to equal params.AllProtocolChanges, got %v", sim.config)
 	}
 
-	if sim.blockchain.Config() != params.AllEthashProtocolChanges {
-		t.Errorf("expected sim blockchain config to equal params.AllEthashProtocolChanges, got %v", sim.config)
+	if sim.blockchain.Config() != params.AllProtocolChanges {
+		t.Errorf("expected sim blockchain config to equal params.AllProtocolChanges, got %v", sim.config)
 	}
 
 	stateDB, _ := sim.blockchain.State()
