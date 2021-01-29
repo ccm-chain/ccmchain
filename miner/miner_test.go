@@ -22,7 +22,7 @@ import (
 	"time"
 
 	"github.com/ccm-chain/ccmchain/common"
-	"github.com/ccm-chain/ccmchain/consensus/ethash"
+	"github.com/ccm-chain/ccmchain/consensus/clique"
 	"github.com/ccm-chain/ccmchain/core"
 	"github.com/ccm-chain/ccmchain/core/rawdb"
 	"github.com/ccm-chain/ccmchain/core/state"
@@ -30,7 +30,6 @@ import (
 	"github.com/ccm-chain/ccmchain/core/vm"
 	"github.com/ccm-chain/ccmchain/database/memorydb"
 	"github.com/ccm-chain/ccmchain/event"
-	"github.com/ccm-chain/ccmchain/params"
 	"github.com/ccm-chain/ccmchain/protocol/downloader"
 	"github.com/ccm-chain/ccmchain/trie"
 )
@@ -243,26 +242,20 @@ func createMiner(t *testing.T) (*Miner, *event.TypeMux) {
 	if err != nil {
 		t.Fatalf("can't create new chain config: %v", err)
 	}
-	// Create event Mux
-	mux := new(event.TypeMux)
 	// Create consensus engine
-	engine := ethash.New(ethash.Config{}, []string{}, false)
-	engine.SetThreads(-1)
-	// Create isLocalBlock
-	isLocalBlock := func(block *types.Block) bool {
-		return true
-	}
+	engine := clique.New(chainConfig.Clique, chainDB)
 	// Create Ethereum backend
-	limit := uint64(1000)
-	bc, err := core.NewBlockChain(chainDB, new(core.CacheConfig), chainConfig, engine, vm.Config{}, isLocalBlock, &limit)
+	bc, err := core.NewBlockChain(chainDB, nil, chainConfig, engine, vm.Config{}, nil, nil)
 	if err != nil {
 		t.Fatalf("can't create new chain %v", err)
 	}
-	statedb, _ := state.New(common.Hash{}, state.NewDatabase(rawdb.NewMemoryDatabase()), nil)
+	statedb, _ := state.New(common.Hash{}, state.NewDatabase(chainDB), nil)
 	blockchain := &testBlockChain{statedb, 10000000, new(event.Feed)}
 
-	pool := core.NewTxPool(testTxPoolConfig, params.TestChainConfig, blockchain)
+	pool := core.NewTxPool(testTxPoolConfig, chainConfig, blockchain)
 	backend := NewMockBackend(bc, pool)
+	// Create event Mux
+	mux := new(event.TypeMux)
 	// Create Miner
-	return New(backend, &config, chainConfig, mux, engine, isLocalBlock), mux
+	return New(backend, &config, chainConfig, mux, engine, nil), mux
 }
