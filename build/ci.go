@@ -584,7 +584,7 @@ func makeWorkdir(wdflag string) string {
 	if wdflag != "" {
 		err = os.MkdirAll(wdflag, 0744)
 	} else {
-		wdflag, err = ioutil.TempDir("", "geth-build-")
+		wdflag, err = ioutil.TempDir("", "gccm-build-")
 	}
 	if err != nil {
 		log.Fatal(err)
@@ -830,7 +830,8 @@ func doAndroidArchive(cmdline []string) {
 
 	if *local {
 		// If we're building locally, copy bundle to build dir and skip Maven
-		os.Rename("geth.aar", filepath.Join(GOBIN, "geth.aar"))
+		os.Rename("gccm.aar", filepath.Join(GOBIN, "gccm.aar"))
+		os.Rename("gccm-sources.jar", filepath.Join(GOBIN, "gccm-sources.jar"))
 		return
 	}
 	meta := newMavenMetadata(env)
@@ -840,8 +841,8 @@ func doAndroidArchive(cmdline []string) {
 	maybeSkipArchive(env)
 
 	// Sign and upload the archive to Azure
-	archive := "geth-" + archiveBasename("android", params.ArchiveVersion(env.Commit)) + ".aar"
-	os.Rename("geth.aar", archive)
+	archive := "gccm-" + archiveBasename("android", params.ArchiveVersion(env.Commit)) + ".aar"
+	os.Rename("gccm.aar", archive)
 
 	if err := archiveUpload(archive, *upload, *signer); err != nil {
 		log.Fatal(err)

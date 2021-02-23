@@ -285,7 +285,11 @@ func listen(ln *enode.LocalNode, addr string) *net.UDPConn {
 	}
 	usocket := socket.(*net.UDPConn)
 	uaddr := socket.LocalAddr().(*net.UDPAddr)
-	ln.SetFallbackIP(net.IP{127, 0, 0, 1})
+	if uaddr.IP.IsUnspecified() {
+		ln.SetFallbackIP(net.IP{127, 0, 0, 1})
+	} else {
+		ln.SetFallbackIP(uaddr.IP)
+	}
 	ln.SetFallbackUDP(uaddr.Port)
 	return usocket
 }
@@ -293,7 +297,11 @@ func listen(ln *enode.LocalNode, addr string) *net.UDPConn {
 func parseBootnodes(ctx *cli.Context) ([]*enode.Node, error) {
 	s := make([]string, 0)
 	if ctx.IsSet(bootnodesFlag.Name) {
-		s = strings.Split(ctx.String(bootnodesFlag.Name), ",")
+		input := ctx.String(bootnodesFlag.Name)
+		if input == "" {
+			return nil, nil
+		}
+		s = strings.Split(input, ",")
 	}
 	nodes := make([]*enode.Node, len(s))
 	var err error
